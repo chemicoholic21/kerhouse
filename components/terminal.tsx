@@ -311,7 +311,7 @@ export function Terminal() {
           "  cat <item>        Show item details (in repos/devs/roles)",
           "",
           "  clear             Clear terminal",
-          "  exit              Close terminal; reset session & go to ~",
+          "  exit              Close terminal and reset",
           "  quit, logout      Same as exit",
           "",
           "Directories: ~, repos, devs, roles"
@@ -436,7 +436,6 @@ export function Terminal() {
       case "exit":
       case "quit":
       case "logout":
-        navigateTo("~")
         closeTerminal()
         return
 
