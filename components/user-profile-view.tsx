@@ -135,27 +135,27 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     href={contributionHref(c.repo)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/contribution flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground hover:text-background"
+                    className="flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground/[0.03]"
                   >
-                    <div className="border border-foreground p-1.5 shrink-0 mt-0.5 group-hover/contribution:border-background/40">
+                    <div className="border border-foreground p-1.5 shrink-0 mt-0.5">
                       <Icon
-                        className="w-3.5 h-3.5 text-highlight group-hover/contribution:text-background"
+                        className="w-3.5 h-3.5 text-highlight"
                         aria-hidden
                         strokeWidth={2.5}
                       />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                        <span className="text-xs font-bold uppercase tracking-wide text-highlight group-hover/contribution:text-background">
+                        <span className="text-xs font-bold uppercase tracking-wide text-highlight">
                           {contributionLabel[c.kind]}
                         </span>
-                        <span className="text-sm font-mono break-all text-muted-foreground group-hover/contribution:text-background/80">
+                        <span className="text-sm font-mono break-all text-muted-foreground">
                           {c.repo}
                         </span>
                       </div>
                       <p className="text-sm mt-1 leading-snug">{c.title}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5 group-hover/contribution:text-background/80">
+                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5">
                       {c.time}
                     </span>
                   </Link>
