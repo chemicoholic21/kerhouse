@@ -146,7 +146,7 @@ export function TrendingRepos() {
           return (
             <div
               key={repo.name}
-              className="border-2 border-foreground p-4 cursor-pointer flex flex-col group"
+              className="border-2 border-foreground p-4 cursor-pointer flex flex-col group hover:bg-foreground/[0.03]"
             >
               <div className="flex items-start gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">

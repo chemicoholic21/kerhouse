@@ -129,7 +129,7 @@ export default function RolesPage() {
           {filtered.map((role, index) => (
             <div
               key={`${role.company}-${role.title}-${index}`}
-              className="border-2 border-foreground p-4 cursor-pointer group"
+              className="border-2 border-foreground p-4 cursor-pointer group hover:bg-foreground/[0.03]"
             >
               <div className="flex items-start gap-3 mb-2">
                 <div className="border-2 border-foreground p-1.5 shrink-0">
