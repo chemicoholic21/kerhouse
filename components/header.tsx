@@ -5,6 +5,7 @@ import { Home, Inbox, Palette, TerminalSquare, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
 import { useAuth } from "./auth-provider"
+import { useMessageDock } from "./message-dock-provider"
 import { useTerminal } from "./terminal-provider"
 
 const themes = [
@@ -20,6 +21,7 @@ export function Header() {
   const { theme, setTheme } = useTheme()
   const { session, ready, signIn, signOut } = useAuth()
   const { openTerminal } = useTerminal()
+  const { openInbox } = useMessageDock()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -59,14 +61,16 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-3">
-          <Link
-            href="/inbox"
-            className="p-1 hover:text-muted-foreground transition-colors text-foreground"
-            aria-label="Inbox"
-            title="Inbox"
+          <button
+            type="button"
+            disabled={!ready}
+            onClick={() => (session ? openInbox() : signIn())}
+            className="p-1 hover:text-muted-foreground transition-colors text-foreground disabled:opacity-50"
+            aria-label={session ? "Inbox" : "Sign in to open inbox"}
+            title={session ? "Inbox" : "Sign in"}
           >
             <Inbox className="w-4 h-4" strokeWidth={2} />
-          </Link>
+          </button>
           <button
             onClick={openTerminal}
             className="p-1 hover:text-muted-foreground transition-colors"

@@ -5,9 +5,11 @@ import { useAuth } from "./auth-provider"
 import { MessageChatDock } from "./message-chat-dock"
 
 type MessageDockContextValue = {
+  openInbox: () => void
   openMessageDock: (peerUsername: string) => void
   closeMessageDock: () => void
   isOpen: boolean
+  /** `null` when the dock is showing the inbox list */
   peerUsername: string | null
 }
 
@@ -25,6 +27,11 @@ export function MessageDockProvider({ children }: { children: ReactNode }) {
     }
   }, [session])
 
+  const openInbox = useCallback(() => {
+    setPeerUsername(null)
+    setOpen(true)
+  }, [])
+
   const openMessageDock = useCallback((peer: string) => {
     setPeerUsername(peer)
     setOpen(true)
@@ -36,20 +43,23 @@ export function MessageDockProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value: MessageDockContextValue = {
+    openInbox,
     openMessageDock,
     closeMessageDock,
-    isOpen: open && peerUsername !== null,
+    isOpen: open,
     peerUsername,
   }
 
   return (
     <MessageDockContext.Provider value={value}>
       {children}
-      {open && peerUsername && session ? (
+      {open && session ? (
         <MessageChatDock
           open={open}
           onClose={closeMessageDock}
           peerUsername={peerUsername}
+          onOpenPeer={setPeerUsername}
+          onBackToInbox={() => setPeerUsername(null)}
           selfUsername={session.username}
         />
       ) : null}
