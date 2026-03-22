@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { Maximize2, Minimize2, X } from "lucide-react"
+import { ChevronUp, Maximize2, Minimize2, X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTerminal } from "./terminal-provider"
 import { repos, developers, roles } from "@/lib/data"
@@ -175,6 +175,7 @@ export function Terminal() {
   const { isOpen, closeTerminal, openTerminal } = useTerminal()
   const [mounted, setMounted] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
   const [input, setInput] = useState("")
   const [currentDir, setCurrentDir] = useState<Directory>("~")
   const [commandHistory, setCommandHistory] = useState<string[]>([])
@@ -196,6 +197,7 @@ export function Terminal() {
     setHistoryIndex(-1)
     pendingKeysRef.current = ""
     setIsMaximized(false)
+    setCollapsed(false)
   }, [])
 
   const wasOpenRef = useRef(false)
@@ -220,14 +222,14 @@ export function Terminal() {
   }, [pathname, mounted])
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || collapsed) return
     const pending = pendingKeysRef.current
     if (pending) {
       setInput((prev) => prev + pending)
       pendingKeysRef.current = ""
     }
     requestAnimationFrame(() => inputRef.current?.focus())
-  }, [isOpen])
+  }, [isOpen, collapsed])
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -484,6 +486,34 @@ export function Terminal() {
 
   if (!isOpen) return null
 
+  const dockedFrame =
+    "fixed z-[100] border-2 border-foreground bg-background bottom-0 left-4 right-4 sm:left-4 sm:right-auto sm:w-[600px] sm:max-w-[min(600px,calc(100vw-2rem))]"
+
+  if (collapsed && !isMaximized) {
+    return (
+      <div
+        ref={terminalRef}
+        className={`${dockedFrame} flex items-center justify-between gap-2 px-2 py-2 select-none`}
+        onDoubleClick={() => setCollapsed(false)}
+      >
+        <span className="text-xs font-bold text-muted-foreground truncate">Terminal</span>
+        <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            className="hover:bg-foreground/10 p-1"
+            onClick={() => setCollapsed(false)}
+            aria-label="Expand"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </button>
+          <button type="button" className="hover:bg-foreground/10 p-1" onClick={closeTerminal} aria-label="Close">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       ref={terminalRef}
@@ -494,8 +524,17 @@ export function Terminal() {
       }`}
     >
       {/* Title bar */}
-      <div className="shrink-0 border-b-2 border-foreground bg-background px-2 py-2 flex items-center select-none gap-2">
-        <div className="flex items-center gap-0.5">
+      <div
+        className="shrink-0 border-b-2 border-foreground bg-background px-2 py-2 flex items-center select-none gap-2 cursor-default"
+        onDoubleClick={() => {
+          if (isMaximized) {
+            setIsMaximized(false)
+          } else {
+            setCollapsed(true)
+          }
+        }}
+      >
+        <div className="flex items-center gap-0.5" onDoubleClick={(e) => e.stopPropagation()}>
           <button
             type="button"
             className="hover:bg-foreground/10 p-1"
@@ -507,7 +546,13 @@ export function Terminal() {
           <button
             type="button"
             className="hover:bg-foreground/10 p-1"
-            onClick={() => setIsMaximized(!isMaximized)}
+            onClick={() => {
+              setIsMaximized((m) => {
+                const next = !m
+                if (next) setCollapsed(false)
+                return next
+              })
+            }}
             aria-label={isMaximized ? "Restore" : "Maximize"}
           >
             {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}

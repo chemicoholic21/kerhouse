@@ -56,7 +56,12 @@ export function MessageChatDock({
 
   if (collapsed) {
     return (
-      <div className={`${dockFrame} flex items-center justify-between gap-2 px-3 py-2`} role="dialog" aria-label={`Message ${peerUsername}`}>
+      <div
+        className={`${dockFrame} flex items-center justify-between gap-2 px-3 py-2`}
+        role="dialog"
+        aria-label={`Message ${peerUsername}`}
+        onDoubleClick={() => setCollapsed(false)}
+      >
         <button
           type="button"
           onClick={() => setCollapsed(false)}
@@ -65,7 +70,10 @@ export function MessageChatDock({
         >
           @{peerUsername}
         </button>
-        <div className="flex items-center gap-0.5 shrink-0">
+        <div
+          className="flex items-center gap-0.5 shrink-0"
+          onDoubleClick={(e) => e.stopPropagation()}
+        >
           <button
             type="button"
             onClick={() => setCollapsed(false)}
@@ -101,9 +109,15 @@ export function MessageChatDock({
       aria-label={`Message ${peerUsername}`}
       aria-expanded="true"
     >
-      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b-2 border-foreground shrink-0">
+      <div
+        className="flex items-center justify-between gap-2 px-3 py-2 border-b-2 border-foreground shrink-0 cursor-default"
+        onDoubleClick={() => setCollapsed(true)}
+      >
         <p className="text-sm font-bold truncate min-w-0">@{peerUsername}</p>
-        <div className="flex items-center gap-0.5 shrink-0">
+        <div
+          className="flex items-center gap-0.5 shrink-0"
+          onDoubleClick={(e) => e.stopPropagation()}
+        >
           <button
             type="button"
             onClick={() => setCollapsed(true)}
