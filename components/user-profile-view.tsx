@@ -20,6 +20,20 @@ const contributionLabel: Record<ContributionKind, string> = {
   review: "Review",
 }
 
+/** Match homepage Explore tags: lowercase, hyphenated */
+function reposTagHref(label: string) {
+  const slug = label
+    .toLowerCase()
+    .trim()
+    .replace(/\s*\/\s*/g, "-")
+    .replace(/\s+/g, "-")
+  return `/repos?tag=${encodeURIComponent(slug)}`
+}
+
+function contributionHref(repo: string) {
+  return `https://github.com/${repo}`
+}
+
 export function UserProfileView({ dev }: { dev: Developer }) {
   const p = prototypeProfile
 
@@ -47,12 +61,13 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-4">
                   {dev.skills.map((skill) => (
-                    <span
+                    <Link
                       key={skill}
-                      className="border border-foreground px-1.5 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                      href={reposTagHref(skill)}
+                      className="border border-foreground px-1.5 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
                     >
                       {skill}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -83,23 +98,25 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               <p className="text-xs text-muted-foreground mb-2">Strong in</p>
               <div className="flex flex-wrap gap-1.5 mb-5">
                 {p.skillsStrong.map((s) => (
-                  <span
+                  <Link
                     key={s}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                    href={reposTagHref(s)}
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
                   >
                     {s}
-                  </span>
+                  </Link>
                 ))}
               </div>
               <p className="text-xs text-muted-foreground mb-2">Also uses</p>
               <div className="flex flex-wrap gap-1.5">
                 {p.skillsAlso.map((s) => (
-                  <span
+                  <Link
                     key={s}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                    href={reposTagHref(s)}
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
                   >
                     {s}
-                  </span>
+                  </Link>
                 ))}
               </div>
             </section>
@@ -113,8 +130,11 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               {prototypeContributions.map((c, i) => {
                 const Icon = contributionIcon[c.kind]
                 return (
-                  <div
+                  <Link
                     key={`${c.repo}-${c.title}-${i}`}
+                    href={contributionHref(c.repo)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group/contribution flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground hover:text-background transition-colors"
                   >
                     <div className="border border-foreground p-1.5 shrink-0 mt-0.5 group-hover/contribution:border-background/40">
@@ -138,7 +158,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5 group-hover/contribution:text-background/80">
                       {c.time}
                     </span>
-                  </div>
+                  </Link>
                 )
               })}
             </div>

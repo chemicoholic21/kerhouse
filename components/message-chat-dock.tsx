@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { ArrowLeft, ChevronUp, Minus, Send, X } from "lucide-react"
 import { inboxThreadPreviews } from "@/lib/inbox-threads"
@@ -165,10 +166,10 @@ export function MessageChatDock({
           <ul className="divide-y divide-foreground border-b border-foreground">
             {inboxThreadPreviews.map((t) => (
               <li key={t.peer}>
-                <button
-                  type="button"
+                <Link
+                  href={`/${t.peer}`}
                   onClick={() => onOpenPeer(t.peer)}
-                  className="group/inboxrow w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground hover:text-background transition-colors"
+                  className="group/inboxrow block w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground hover:text-background transition-colors"
                 >
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="font-bold text-highlight text-sm group-hover/inboxrow:text-background">
@@ -181,7 +182,7 @@ export function MessageChatDock({
                   <p className="text-sm text-muted-foreground mt-1 line-clamp-1 group-hover/inboxrow:text-background/80">
                     {t.preview}
                   </p>
-                </button>
+                </Link>
               </li>
             ))}
           </ul>
