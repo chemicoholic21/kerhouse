@@ -31,7 +31,7 @@ export function Hero() {
               href="/devs"
               className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background"
             >
-              Developer Rankings
+              See Leaderboards
             </Link>
           </div>
         </div>
