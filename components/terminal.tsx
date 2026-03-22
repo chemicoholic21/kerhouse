@@ -176,7 +176,6 @@ export function Terminal() {
   const [mounted, setMounted] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
-  /** Scroll area height when docked (px); title + handle are separate. */
   const [dockedContentHeight, setDockedContentHeight] = useState(248)
   const [input, setInput] = useState("")
   const [currentDir, setCurrentDir] = useState<Directory>("~")
@@ -544,9 +543,10 @@ export function Terminal() {
     )
   }
 
-  const onResizeHandleMouseDown = (e: React.MouseEvent) => {
+  const onResizeDragMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return
     e.preventDefault()
+    e.stopPropagation()
     const startY = e.clientY
     const startH = dockedContentHeight
     document.body.style.userSelect = "none"
@@ -573,21 +573,12 @@ export function Terminal() {
       className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))] flex flex-col"
+          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
       }`}
     >
-      {!isMaximized ? (
-        <div
-          className="h-2 shrink-0 cursor-ns-resize border-b border-foreground/40 hover:bg-foreground/10"
-          onMouseDown={onResizeHandleMouseDown}
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize terminal height"
-        />
-      ) : null}
       {/* Title bar — same layout as message dock: title left, icons right */}
       <div
-        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
+        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center gap-2 select-none cursor-default"
         onDoubleClick={() => {
           if (isMaximized) {
             setIsMaximized(false)
@@ -596,7 +587,19 @@ export function Terminal() {
           }
         }}
       >
-        <p className="text-sm font-bold text-highlight truncate min-w-0">Terminal</p>
+        <p className="text-sm font-bold text-highlight truncate min-w-0 shrink-0">Terminal</p>
+        {!isMaximized ? (
+          <div
+            className="flex-1 min-w-0 min-h-8 cursor-ns-resize touch-none"
+            onMouseDown={onResizeDragMouseDown}
+            onDoubleClick={(e) => e.stopPropagation()}
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label="Resize terminal height"
+          />
+        ) : (
+          <div className="flex-1 min-w-0" />
+        )}
         <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
           {!isMaximized ? (
             <button
