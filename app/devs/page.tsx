@@ -172,7 +172,7 @@ export default function DevsPage() {
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
         <div className="layout-container text-center text-sm">
           <p>
-            © 2026 hackerhou.se. A home for <span className="text-highlight">human</span> programmers.
+            © 2026 <span className="text-brand">hackerhou.se</span>. A home for <span className="text-highlight">human</span> programmers.
           </p>
         </div>
       </footer>

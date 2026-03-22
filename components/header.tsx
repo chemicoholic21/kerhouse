@@ -42,7 +42,10 @@ export function Header() {
     <header className="border-b-2 border-dashed border-foreground/70 py-4">
       <div className="layout-container flex items-center justify-between">
         <div className="flex items-center gap-8 translate-y-0.5">
-          <Link href="/" className="flex items-center gap-2 text-lg font-bold">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-lg font-bold text-brand hover:opacity-90 transition-opacity"
+          >
             <Home className="w-5 h-5" strokeWidth={2.5} />
             <span>hackerhou.se</span>
           </Link>
