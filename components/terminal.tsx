@@ -35,12 +35,7 @@ export function Terminal() {
   const [currentDir, setCurrentDir] = useState<Directory>("~")
   const [commandHistory, setCommandHistory] = useState<string[]>([])
   const [historyIndex, setHistoryIndex] = useState(-1)
-  const [history, setHistory] = useState<string[]>([
-    "a home for human programmers",
-    "",
-    "Type 'help' for available commands.",
-    ""
-  ])
+  const [history, setHistory] = useState<string[]>([])
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
