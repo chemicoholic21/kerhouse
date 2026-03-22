@@ -54,7 +54,6 @@ export function Header() {
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="hover:underline underline-offset-4">Home</Link>
             <Link href="/repos" className="hover:underline underline-offset-4">Repos</Link>
             <Link href="/devs" className="hover:underline underline-offset-4">Devs</Link>
             <Link href="/roles" className="hover:underline underline-offset-4">Roles</Link>
