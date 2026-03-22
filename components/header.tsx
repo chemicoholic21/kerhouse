@@ -63,6 +63,14 @@ export function Header() {
         <div className="flex items-center gap-3">
           <button
             type="button"
+            onClick={openTerminal}
+            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
+            aria-label="Open terminal"
+          >
+            <TerminalSquare className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
             disabled={!ready}
             onClick={() => (session ? openInbox() : signIn())}
             className="p-1 cursor-pointer hover:text-muted-foreground transition-colors text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
@@ -70,14 +78,6 @@ export function Header() {
             title={session ? "Inbox" : "Sign in"}
           >
             <Inbox className="w-4 h-4" strokeWidth={2} />
-          </button>
-          <button
-            type="button"
-            onClick={openTerminal}
-            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
-            aria-label="Open terminal"
-          >
-            <TerminalSquare className="w-4 h-4" />
           </button>
           <div className="relative mr-3" ref={menuRef}>
             <button
