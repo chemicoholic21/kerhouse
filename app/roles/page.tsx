@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Header } from "@/components/header"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, MapPin } from "lucide-react"
 import { roles, roleWorkplaceOptions, roleAreaOptions } from "@/lib/data"
 
 function Dropdown({
@@ -96,6 +96,10 @@ export default function RolesPage() {
             >
               <div className="font-bold group-hover:underline leading-snug">{role.title}</div>
               <div className="text-sm text-muted-foreground mt-1">{role.company}</div>
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-2">
+                <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden />
+                <span>{role.location}</span>
+              </div>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {role.tags.map((tag) => (
                   <span key={tag} className="border border-foreground px-1.5 py-0.5 text-xs">

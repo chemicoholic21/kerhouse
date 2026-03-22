@@ -454,6 +454,7 @@ export function Terminal() {
             output = [
               `Title: ${r.title}`,
               `Company: ${r.company}`,
+              `Location: ${r.location}`,
               `Workplace: ${r.workplace}`,
               `Area: ${r.area}`,
               `Tags: ${r.tags.join(", ")}`

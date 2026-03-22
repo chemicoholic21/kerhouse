@@ -40,6 +40,7 @@ export type RoleArea =
 export interface Role {
   title: string
   company: string
+  location: string
   workplace: RoleWorkplace
   area: RoleArea
   tags: string[]
@@ -248,36 +249,36 @@ export const skillsList = [
 ]
 
 export const roles: Role[] = [
-  { title: "Symbolic RL search guidance lead", company: "Ndea", workplace: "remote", area: "ml", tags: ["Reinforcement learning", "Research", "Staff"] },
-  { title: "Product specialist", company: "Spice Data", workplace: "remote", area: "product", tags: ["B2B", "Data tooling", "Customer-facing"] },
-  { title: "Software engineer", company: "AnswerThis", workplace: "remote", area: "engineering", tags: ["Full stack", "Early team"] },
-  { title: "Engineer, GTM, or ops — BPO automation", company: "Kaizen", workplace: "remote", area: "gtm", tags: ["Automation", "Operations", "Multi-role"] },
-  { title: "Software engineer", company: "Nango", workplace: "remote", area: "engineering", tags: ["APIs", "Integrations", "Agents"] },
-  { title: "Software engineer", company: "9 Mothers Defense", workplace: "onsite", area: "engineering", tags: ["Austin, TX", "Defense", "Systems"] },
-  { title: "Founding platform engineer", company: "Converge", workplace: "onsite", area: "engineering", tags: ["New York, NY", "Infrastructure", "Founding"] },
-  { title: "Product manager or product / data engineer", company: "Hive", workplace: "remote", area: "product", tags: ["Data products", "Analytics", "Scrappy"] },
-  { title: "Software engineer", company: "Meticulous", workplace: "remote", area: "engineering", tags: ["Developer tools", "Testing", "Product quality"] },
-  { title: "Open roles — engineering, growth, product", company: "SigNoz", workplace: "remote", area: "engineering", tags: ["Observability", "Open source", "Multi-track"] },
-  { title: "Engineering lead", company: "Multifactor", workplace: "remote", area: "engineering", tags: ["Leadership", "Identity", "Security-adjacent"] },
-  { title: "Customer success engineer", company: "Stardex", workplace: "remote", area: "customer_success", tags: ["Technical CSM", "Onboarding", "Support"] },
-  { title: "Software engineer", company: "Structured AI", workplace: "remote", area: "engineering", tags: ["Structured data", "AI"] },
-  { title: "Security engineer — AI infrastructure", company: "Roboflow", workplace: "remote", area: "security", tags: ["AI infra", "Cloud", "Hardening"] },
-  { title: "Software engineer", company: "Jiga", workplace: "remote", area: "engineering", tags: ["Manufacturing", "Supply chain", "Full stack"] },
-  { title: "Software engineer (Python)", company: "Reflex", workplace: "remote", area: "engineering", tags: ["Python", "Web framework", "Open source"] },
-  { title: "Enterprise account executive", company: "Kyber", workplace: "remote", area: "sales", tags: ["Enterprise", "B2B", "Closing"] },
-  { title: "Software engineer", company: "Ubicloud", workplace: "hybrid", area: "engineering", tags: ["Turkey", "Netherlands", "California", "Cloud"] },
-  { title: "Founding reliability engineer", company: "LiteLLM", workplace: "remote", area: "engineering", tags: ["SRE", "LLM infra", "Founding"] },
-  { title: "Engineering intern — housing", company: "Bild AI", workplace: "remote", area: "intern", tags: ["Housing", "Impact", "Summer"] },
-  { title: "Software engineer", company: "Hightouch", workplace: "remote", area: "engineering", tags: ["Data activation", "Reverse ETL"] },
-  { title: "Deployment lead", company: "Trellis AI", workplace: "remote", area: "gtm", tags: ["Healthcare", "Medication access", "Implementation"] },
-  { title: "Software engineer", company: "Event Horizon Labs", workplace: "remote", area: "engineering", tags: ["Deep tech", "Early team"] },
-  { title: "Software engineer", company: "Corgi Labs", workplace: "remote", area: "engineering", tags: ["Applied research", "Small team"] },
-  { title: "Director of computational biology or AI scientist / engineer", company: "Verge", workplace: "remote", area: "ml", tags: ["Comp bio", "Drug discovery", "Research"] },
-  { title: "Software engineer", company: "SIM", workplace: "onsite", area: "engineering", tags: ["San Francisco, CA", "Systems", "High bar"] },
-  { title: "Designer who codes", company: "Hadrius", workplace: "remote", area: "design", tags: ["Product design", "Frontend", "Prototyping"] },
-  { title: "AI engineering intern", company: "Bitmovin", workplace: "onsite", area: "intern", tags: ["Austria", "Summer 2026", "Video"] },
-  { title: "Software engineer", company: "Padlet", workplace: "hybrid", area: "engineering", tags: ["San Francisco", "Singapore", "Collaboration"] },
-  { title: "Software engineer — mental health automation", company: "Legion Health", workplace: "remote", area: "engineering", tags: ["Healthcare", "Autonomy", "Backend"] },
+  { title: "Symbolic RL search guidance lead", company: "Ndea", location: "Remote", workplace: "remote", area: "ml", tags: ["Reinforcement learning", "Research", "Staff"] },
+  { title: "Product specialist", company: "Spice Data", location: "Remote", workplace: "remote", area: "product", tags: ["B2B", "Data tooling", "Customer-facing"] },
+  { title: "Software engineer", company: "AnswerThis", location: "Remote", workplace: "remote", area: "engineering", tags: ["Full stack", "Early team"] },
+  { title: "Engineer, GTM, or ops — BPO automation", company: "Kaizen", location: "Remote", workplace: "remote", area: "gtm", tags: ["Automation", "Operations", "Multi-role"] },
+  { title: "Software engineer", company: "Nango", location: "Remote", workplace: "remote", area: "engineering", tags: ["APIs", "Integrations", "Agents"] },
+  { title: "Software engineer", company: "9 Mothers Defense", location: "Austin, TX", workplace: "onsite", area: "engineering", tags: ["Defense", "Systems"] },
+  { title: "Founding platform engineer", company: "Converge", location: "New York, NY", workplace: "onsite", area: "engineering", tags: ["Infrastructure", "Founding"] },
+  { title: "Product manager or product / data engineer", company: "Hive", location: "Remote", workplace: "remote", area: "product", tags: ["Data products", "Analytics", "Scrappy"] },
+  { title: "Software engineer", company: "Meticulous", location: "Remote", workplace: "remote", area: "engineering", tags: ["Developer tools", "Testing", "Product quality"] },
+  { title: "Open roles — engineering, growth, product", company: "SigNoz", location: "Remote", workplace: "remote", area: "engineering", tags: ["Observability", "Open source", "Multi-track"] },
+  { title: "Engineering lead", company: "Multifactor", location: "Remote", workplace: "remote", area: "engineering", tags: ["Leadership", "Identity", "Security-adjacent"] },
+  { title: "Customer success engineer", company: "Stardex", location: "Remote", workplace: "remote", area: "customer_success", tags: ["Technical CSM", "Onboarding", "Support"] },
+  { title: "Software engineer", company: "Structured AI", location: "Remote", workplace: "remote", area: "engineering", tags: ["Structured data", "AI"] },
+  { title: "Security engineer — AI infrastructure", company: "Roboflow", location: "Remote", workplace: "remote", area: "security", tags: ["AI infra", "Cloud", "Hardening"] },
+  { title: "Software engineer", company: "Jiga", location: "Remote", workplace: "remote", area: "engineering", tags: ["Manufacturing", "Supply chain", "Full stack"] },
+  { title: "Software engineer (Python)", company: "Reflex", location: "Remote", workplace: "remote", area: "engineering", tags: ["Python", "Web framework", "Open source"] },
+  { title: "Enterprise account executive", company: "Kyber", location: "Remote", workplace: "remote", area: "sales", tags: ["Enterprise", "B2B", "Closing"] },
+  { title: "Software engineer", company: "Ubicloud", location: "Turkey, Netherlands, California", workplace: "hybrid", area: "engineering", tags: ["Cloud", "Distributed"] },
+  { title: "Founding reliability engineer", company: "LiteLLM", location: "Remote", workplace: "remote", area: "engineering", tags: ["SRE", "LLM infra", "Founding"] },
+  { title: "Engineering intern — housing", company: "Bild AI", location: "Remote", workplace: "remote", area: "intern", tags: ["Housing", "Impact", "Summer"] },
+  { title: "Software engineer", company: "Hightouch", location: "Remote", workplace: "remote", area: "engineering", tags: ["Data activation", "Reverse ETL"] },
+  { title: "Deployment lead", company: "Trellis AI", location: "Remote", workplace: "remote", area: "gtm", tags: ["Healthcare", "Medication access", "Implementation"] },
+  { title: "Software engineer", company: "Event Horizon Labs", location: "Remote", workplace: "remote", area: "engineering", tags: ["Deep tech", "Early team"] },
+  { title: "Software engineer", company: "Corgi Labs", location: "Remote", workplace: "remote", area: "engineering", tags: ["Applied research", "Small team"] },
+  { title: "Director of computational biology or AI scientist / engineer", company: "Verge", location: "Remote", workplace: "remote", area: "ml", tags: ["Comp bio", "Drug discovery", "Research"] },
+  { title: "Software engineer", company: "SIM", location: "San Francisco, CA", workplace: "onsite", area: "engineering", tags: ["Systems", "High bar"] },
+  { title: "Designer who codes", company: "Hadrius", location: "Remote", workplace: "remote", area: "design", tags: ["Product design", "Frontend", "Prototyping"] },
+  { title: "AI engineering intern", company: "Bitmovin", location: "Austria", workplace: "onsite", area: "intern", tags: ["Summer 2026", "Video"] },
+  { title: "Software engineer", company: "Padlet", location: "San Francisco · Singapore", workplace: "hybrid", area: "engineering", tags: ["Collaboration", "Global"] },
+  { title: "Software engineer — mental health automation", company: "Legion Health", location: "Remote", workplace: "remote", area: "engineering", tags: ["Healthcare", "Autonomy", "Backend"] },
 ]
 
 export const categories: { value: Category; label: string }[] = [
