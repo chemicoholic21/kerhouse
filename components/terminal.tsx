@@ -25,7 +25,7 @@ const pathToDirectory: Record<string, Directory> = {
 export function Terminal() {
   const router = useRouter()
   const pathname = usePathname()
-  const { isOpen, closeTerminal } = useTerminal()
+  const { isOpen, closeTerminal, openTerminal } = useTerminal()
   const [mounted, setMounted] = useState(false)
   const [position, setPosition] = useState({ x: 100, y: 100 })
   const [isMaximized, setIsMaximized] = useState(false)
@@ -44,6 +44,11 @@ export function Terminal() {
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const pendingKeysRef = useRef("")
+  const isOpenRef = useRef(isOpen)
+  const openTerminalRef = useRef(openTerminal)
+  isOpenRef.current = isOpen
+  openTerminalRef.current = openTerminal
 
   useEffect(() => {
     setMounted(true)
@@ -59,10 +64,46 @@ export function Terminal() {
   }, [pathname, mounted])
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus()
+    if (!isOpen) return
+    const pending = pendingKeysRef.current
+    if (pending) {
+      setInput((prev) => prev + pending)
+      pendingKeysRef.current = ""
     }
+    requestAnimationFrame(() => inputRef.current?.focus())
   }, [isOpen])
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      if (e.key.length !== 1 || !/^[a-zA-Z]$/.test(e.key)) return
+
+      const target = e.target
+      const inputEl = inputRef.current
+      if (isOpenRef.current && target === inputEl) return
+
+      if (target instanceof Element) {
+        const field = target.closest("input, textarea, [contenteditable='true']")
+        if (field !== null && field !== inputEl) return
+      }
+
+      if (isOpenRef.current && document.activeElement === inputEl) {
+        return
+      }
+
+      e.preventDefault()
+      if (!isOpenRef.current) {
+        pendingKeysRef.current += e.key
+        openTerminalRef.current()
+      } else {
+        setInput((prev) => prev + e.key)
+        requestAnimationFrame(() => inputRef.current?.focus())
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown, true)
+    return () => document.removeEventListener("keydown", onKeyDown, true)
+  }, [])
 
   useEffect(() => {
     if (contentRef.current) {
