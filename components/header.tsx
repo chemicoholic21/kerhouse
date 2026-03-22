@@ -19,7 +19,7 @@ const themes = [
 
 export function Header() {
   const { theme, setTheme } = useTheme()
-  const { session, ready, signIn, signOut } = useAuth()
+  const { session, ready, signIn } = useAuth()
   const { openTerminal } = useTerminal()
   const { openInbox } = useMessageDock()
   const [mounted, setMounted] = useState(false)
@@ -117,23 +117,20 @@ export function Header() {
               >
                 <UserCircle className="w-5 h-5" strokeWidth={2} />
               </Link>
-              <button
-                type="button"
-                onClick={signOut}
-                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background"
+              <Link
+                href="/sign-out"
+                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background inline-flex items-center justify-center"
               >
                 Sign out
-              </button>
+              </Link>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={signIn}
-              disabled={!ready}
-              className="border-2 border-highlight px-4 py-0.5 font-medium text-highlight hover:bg-highlight hover:text-highlight-foreground disabled:opacity-50"
+            <Link
+              href="/sign-in"
+              className="border-2 border-highlight px-4 py-0.5 font-medium text-highlight hover:bg-highlight hover:text-highlight-foreground inline-flex items-center justify-center"
             >
               Sign in
-            </button>
+            </Link>
           )}
         </div>
       </div>
