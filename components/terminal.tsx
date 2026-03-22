@@ -488,7 +488,7 @@ export function Terminal() {
 
   /* Docked terminal: wider / shorter panel than the message dock */
   const dockedFrame =
-    "fixed z-[100] border-2 border-foreground bg-background bottom-2 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm bottom-2 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
 
   if (collapsed && !isMaximized) {
     return (
@@ -525,7 +525,7 @@ export function Terminal() {
   return (
     <div
       ref={terminalRef}
-      className={`fixed z-[100] border-2 border-foreground bg-background ${
+      className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
           : "bottom-2 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
@@ -533,7 +533,7 @@ export function Terminal() {
     >
       {/* Title bar — same layout as message dock: title left, icons right */}
       <div
-        className="shrink-0 border-b-2 border-foreground bg-background px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
+        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
         onDoubleClick={() => {
           if (isMaximized) {
             setIsMaximized(false)
