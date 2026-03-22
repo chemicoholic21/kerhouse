@@ -45,8 +45,13 @@ export function MessageDockProvider({ children }: { children: ReactNode }) {
   return (
     <MessageDockContext.Provider value={value}>
       {children}
-      {open && peerUsername ? (
-        <MessageChatDock open={open} onClose={closeMessageDock} peerUsername={peerUsername} />
+      {open && peerUsername && session ? (
+        <MessageChatDock
+          open={open}
+          onClose={closeMessageDock}
+          peerUsername={peerUsername}
+          selfUsername={session.username}
+        />
       ) : null}
     </MessageDockContext.Provider>
   )

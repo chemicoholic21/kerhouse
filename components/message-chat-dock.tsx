@@ -14,10 +14,12 @@ export function MessageChatDock({
   open,
   onClose,
   peerUsername,
+  selfUsername,
 }: {
   open: boolean
   onClose: () => void
   peerUsername: string
+  selfUsername: string
 }) {
   const [messages, setMessages] = useState<ChatBubble[]>([])
   const [draft, setDraft] = useState("")
@@ -116,25 +118,28 @@ export function MessageChatDock({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2 text-sm">
-        {messages.map((m) => (
-          <div key={m.id} className={`flex ${m.from === "self" ? "justify-end" : "justify-start"}`}>
+      <div className="flex-1 overflow-y-auto px-3 py-2 text-sm">
+        {messages.map((m, i) => {
+          const label = m.from === "self" ? selfUsername : peerUsername
+          const prev = messages[i - 1]
+          const next = messages[i + 1]
+          const showHeader = i === 0 || prev?.from !== m.from
+          const showTime = i === messages.length - 1 || next?.from !== m.from
+          return (
             <div
-              className={`max-w-[90%] border border-foreground px-2 py-1.5 ${
-                m.from === "self" ? "bg-foreground text-background" : "bg-background"
-              }`}
+              key={m.id}
+              className={`max-w-[95%] min-w-0 ${showHeader ? (i === 0 ? "" : "mt-4") : "mt-1.5"}`}
             >
-              <p className="leading-snug">{m.text}</p>
-              <p
-                className={`text-[10px] mt-1 tabular-nums ${
-                  m.from === "self" ? "text-background/70" : "text-muted-foreground"
-                }`}
-              >
-                {m.time}
-              </p>
+              {showHeader ? (
+                <p className="text-[10px] font-mono text-muted-foreground mb-1">@{label}</p>
+              ) : null}
+              <p className="leading-snug text-foreground">{m.text}</p>
+              {showTime ? (
+                <p className="text-[10px] mt-1 tabular-nums text-muted-foreground">{m.time}</p>
+              ) : null}
             </div>
-          </div>
-        ))}
+          )
+        })}
         <div ref={bottomRef} />
       </div>
 
