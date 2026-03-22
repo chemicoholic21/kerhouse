@@ -1,20 +1,26 @@
 import Link from "next/link"
-import { GitFork, MapPin, Star, TerminalSquare, User } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
+import { Eye, GitCommit, GitPullRequest, MapPin, MessageSquare, User } from "lucide-react"
 import type { Developer } from "@/lib/data"
-import { repos } from "@/lib/data"
-import { prototypeProfile } from "@/lib/profile-prototype"
+import type { ContributionKind } from "@/lib/profile-prototype"
+import { prototypeContributions, prototypeProfile } from "@/lib/profile-prototype"
 
-export function UserProfileView({
-  dev,
-  terminalEntry,
-}: {
-  dev: Developer
-  terminalEntry: string
-}) {
+const contributionIcon: Record<ContributionKind, LucideIcon> = {
+  commit: GitCommit,
+  pr: GitPullRequest,
+  issue: MessageSquare,
+  review: Eye,
+}
+
+const contributionLabel: Record<ContributionKind, string> = {
+  commit: "Commit",
+  pr: "PR",
+  issue: "Issue",
+  review: "Review",
+}
+
+export function UserProfileView({ dev }: { dev: Developer }) {
   const p = prototypeProfile
-  const pinnedRepos = p.pinnedRepoNames
-    .map((name) => repos.find((r) => r.name === name))
-    .filter((r): r is (typeof repos)[number] => r != null)
 
   return (
     <>
@@ -83,87 +89,32 @@ export function UserProfileView({
         </section>
 
         <section className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Pinned repos</h2>
-          <div className="flex flex-col gap-3">
-            {pinnedRepos.map((repo) => {
-              const Icon = repo.icon
+          <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Contributions</h2>
+          <div className="border-y border-foreground divide-y divide-foreground">
+            {prototypeContributions.map((c, i) => {
+              const Icon = contributionIcon[c.kind]
               return (
                 <div
-                  key={repo.name}
-                  className="border-2 border-foreground p-4 flex flex-col sm:flex-row sm:items-start gap-3"
+                  key={`${c.repo}-${c.title}-${i}`}
+                  className="flex items-start gap-3 py-[11px] px-1 hover:bg-foreground/[0.03] transition-colors"
                 >
-                  <div className="border-2 border-foreground p-2 shrink-0 self-start">
-                    <Icon className="w-5 h-5" />
+                  <div className="border border-foreground p-1.5 shrink-0 mt-0.5">
+                    <Icon className="w-3.5 h-3.5" aria-hidden />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="font-bold text-sm break-all">{repo.name}</div>
-                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{repo.description}</p>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {repo.tags.map((tag) => (
-                        <span key={tag} className="border border-foreground px-1.5 py-0.5 text-xs">
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                      <span className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                        {contributionLabel[c.kind]}
+                      </span>
+                      <span className="text-sm font-mono break-all text-muted-foreground">{c.repo}</span>
                     </div>
+                    <p className="text-sm mt-1 leading-snug">{c.title}</p>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground shrink-0 sm:flex-col sm:items-end sm:gap-1">
-                    <span className="flex items-center gap-1 tabular-nums">
-                      <Star className="w-3.5 h-3.5" aria-hidden />
-                      {typeof repo.stars === "number" ? repo.stars.toLocaleString("en-US") : repo.stars}
-                    </span>
-                    <span className="flex items-center gap-1 tabular-nums">
-                      <GitFork className="w-3.5 h-3.5" aria-hidden />
-                      {repo.forks.toLocaleString("en-US")}
-                    </span>
-                  </div>
+                  <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5">{c.time}</span>
                 </div>
               )
             })}
           </div>
-        </section>
-
-        <section className="border-2 border-foreground p-5 mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3">Activity</h2>
-          <div className="flex flex-wrap gap-2 mb-3">
-            <span
-              className={`border-2 border-foreground px-2 py-1 text-xs ${p.openToMentorship ? "bg-foreground text-background" : "opacity-50"}`}
-            >
-              Open to mentorship
-            </span>
-            <span
-              className={`border-2 border-foreground px-2 py-1 text-xs ${p.openToWork ? "bg-foreground text-background" : "opacity-50"}`}
-            >
-              Open to work
-            </span>
-          </div>
-          <p className="text-sm text-muted-foreground">{p.lastActive}</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-2">Roles interest</h2>
-          <p className="text-sm mb-2">
-            Prefers <span className="font-medium">{p.rolesInterest.workplace}</span>
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {p.rolesInterest.skills.map((s) => (
-              <span key={s} className="border border-foreground px-2 py-0.5 text-xs">
-                {s}
-              </span>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-2 border-dashed border-foreground/70 p-4">
-          <div className="flex items-center gap-2 text-sm font-bold mb-2">
-            <TerminalSquare className="w-4 h-4" aria-hidden />
-            Terminal
-          </div>
-          <p className="text-xs text-muted-foreground mb-2">
-            This profile lines up with a row in <code className="px-1 border border-foreground/50">~/devs</code>:
-          </p>
-          <pre className="text-xs border-2 border-foreground p-3 overflow-x-auto bg-foreground/[0.03] font-mono leading-relaxed">
-            {`$ cd devs\n$ ls\n… ${terminalEntry}\n$ cat ${terminalEntry}`}
-          </pre>
         </section>
 
         <p className="text-sm text-muted-foreground mt-8">

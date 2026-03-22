@@ -17,13 +17,10 @@ export default async function UserProfilePage({
   const dev = developers.find((d) => d.username === username)
   if (!dev) notFound()
 
-  const index = developers.indexOf(dev)
-  const terminalEntry = `${index + 1}_${dev.username}`
-
   return (
     <div className="min-h-screen">
       <Header />
-      <UserProfileView dev={dev} terminalEntry={terminalEntry} />
+      <UserProfileView dev={dev} />
     </div>
   )
 }
