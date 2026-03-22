@@ -30,7 +30,7 @@ export function WeeklyLeaderboard() {
       </div>
 
       <div className="border-y border-foreground">
-        <div className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-2 px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
+        <div className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
           <span className="text-right">Rank</span>
           <span>Engineer</span>
           <span className="text-right tabular-nums">Impact Score</span>
@@ -39,7 +39,7 @@ export function WeeklyLeaderboard() {
           {leaderboardData.map((dev) => (
             <div
               key={dev.handle}
-              className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-2.5 px-2 hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+              className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background transition-colors cursor-pointer"
             >
               <span className="text-right text-sm tabular-nums">
                 {formatRank(dev.rank)}

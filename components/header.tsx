@@ -61,7 +61,7 @@ export function Header() {
           >
             <TerminalSquare className="w-4 h-4" />
           </button>
-          <div className="relative" ref={menuRef}>
+          <div className="relative mr-3" ref={menuRef}>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="p-1 hover:text-muted-foreground transition-colors"
