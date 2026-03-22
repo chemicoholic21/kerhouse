@@ -570,95 +570,104 @@ export function Terminal() {
   return (
     <div
       ref={terminalRef}
-      className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
+      className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm flex flex-col ${
         isMaximized
-          ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))] relative"
+          ? "inset-0 h-dvh w-full"
+          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
       }`}
     >
-      {!isMaximized ? (
-        <div
-          className="absolute top-0 left-0 right-0 h-2 z-10 cursor-ns-resize touch-none"
-          onMouseDown={onResizeDragMouseDown}
-          role="separator"
-          aria-orientation="horizontal"
-          aria-label="Resize terminal height"
-        />
-      ) : null}
-      {/* Title bar — same layout as message dock: title left, icons right */}
+      {/* Inner wrapper: `relative` here — never on the fixed shell (would override `fixed`). */}
       <div
-        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
-        onDoubleClick={() => {
-          if (isMaximized) {
-            setIsMaximized(false)
-          } else {
-            setCollapsed(true)
-          }
-        }}
+        className={
+          isMaximized
+            ? "flex min-h-0 min-w-0 flex-1 flex-col"
+            : "relative flex w-full flex-col"
+        }
       >
-        <p className="text-sm font-bold text-highlight truncate min-w-0">Terminal</p>
-        <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
-          {!isMaximized ? (
+        {!isMaximized ? (
+          <div
+            className="absolute top-0 right-0 left-0 z-20 h-3 cursor-ns-resize touch-none"
+            onMouseDown={onResizeDragMouseDown}
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label="Resize terminal height"
+          />
+        ) : null}
+        {/* Title bar — same layout as message dock: title left, icons right */}
+        <div
+          className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
+          onDoubleClick={() => {
+            if (isMaximized) {
+              setIsMaximized(false)
+            } else {
+              setCollapsed(true)
+            }
+          }}
+        >
+          <p className="text-sm font-bold text-highlight truncate min-w-0">Terminal</p>
+          <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
+            {!isMaximized ? (
+              <button
+                type="button"
+                className="p-1 hover:bg-foreground/10"
+                onClick={() => setCollapsed(true)}
+                aria-label="Collapse"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+            ) : null}
             <button
               type="button"
               className="p-1 hover:bg-foreground/10"
-              onClick={() => setCollapsed(true)}
-              aria-label="Collapse"
+              onClick={() => {
+                setIsMaximized((m) => {
+                  const next = !m
+                  if (next) setCollapsed(false)
+                  return next
+                })
+              }}
+              aria-label={isMaximized ? "Restore" : "Maximize"}
             >
-              <Minus className="w-4 h-4" />
+              {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
             </button>
-          ) : null}
-          <button
-            type="button"
-            className="p-1 hover:bg-foreground/10"
-            onClick={() => {
-              setIsMaximized((m) => {
-                const next = !m
-                if (next) setCollapsed(false)
-                return next
-              })
-            }}
-            aria-label={isMaximized ? "Restore" : "Maximize"}
-          >
-            {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-          </button>
-          <button type="button" className="p-1 hover:bg-foreground/10" onClick={closeTerminal} aria-label="Close">
-            <X className="w-4 h-4" />
-          </button>
+            <button type="button" className="p-1 hover:bg-foreground/10" onClick={closeTerminal} aria-label="Close">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Terminal content */}
-      <div
-        ref={contentRef}
-        className={`p-3 overflow-y-auto font-mono text-sm ${
-          isMaximized ? "min-h-0 flex-1" : "shrink-0"
-        }`}
-        style={isMaximized ? undefined : { height: dockedContentHeight }}
-        onClick={() => inputRef.current?.focus()}
-      >
-        {history.map((line, i) => (
-          <div key={i} className="whitespace-pre-wrap leading-relaxed">{line}</div>
-        ))}
-        <div className="flex">
-          <span>{getPrompt()}&nbsp;</span>
-          <div className="relative flex-1">
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-transparent outline-none border-none caret-transparent"
-              spellCheck={false}
-              autoComplete="off"
-            />
-            <span 
-              className="absolute top-0 left-0 pointer-events-none"
-              style={{ paddingLeft: `${input.length}ch` }}
-            >
-              <span className="bg-foreground text-background">&nbsp;</span>
-            </span>
+        {/* Terminal content */}
+        <div
+          ref={contentRef}
+          className={`p-3 overflow-y-auto font-mono text-sm ${
+            isMaximized ? "min-h-0 flex-1" : "shrink-0"
+          }`}
+          style={isMaximized ? undefined : { height: dockedContentHeight }}
+          onClick={() => inputRef.current?.focus()}
+        >
+          {history.map((line, i) => (
+            <div key={i} className="whitespace-pre-wrap leading-relaxed">{line}</div>
+          ))}
+          <div className="flex">
+            <span>{getPrompt()}&nbsp;</span>
+            <div className="relative flex-1">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="w-full bg-transparent outline-none border-none caret-transparent"
+                spellCheck={false}
+                autoComplete="off"
+              />
+              <span
+                className="absolute top-0 left-0 pointer-events-none"
+                style={{ paddingLeft: `${input.length}ch` }}
+              >
+                <span className="bg-foreground text-background">&nbsp;</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
