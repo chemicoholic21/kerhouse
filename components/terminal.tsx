@@ -185,6 +185,8 @@ export function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const pendingKeysRef = useRef("")
+  /** When false, next close skips reset (Escape); exit/X still reset. */
+  const closeResetsTerminalRef = useRef(true)
   const isOpenRef = useRef(isOpen)
   const openTerminalRef = useRef(openTerminal)
   const closeTerminalRef = useRef(closeTerminal)
@@ -205,7 +207,10 @@ export function Terminal() {
   const wasOpenRef = useRef(false)
   useEffect(() => {
     if (wasOpenRef.current && !isOpen) {
-      resetTerminalUi()
+      if (closeResetsTerminalRef.current) {
+        resetTerminalUi()
+      }
+      closeResetsTerminalRef.current = true
     }
     wasOpenRef.current = isOpen
   }, [isOpen, resetTerminalUi])
@@ -215,6 +220,7 @@ export function Terminal() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return
       e.preventDefault()
+      closeResetsTerminalRef.current = false
       closeTerminalRef.current()
     }
     document.addEventListener("keydown", onKey)
@@ -326,7 +332,7 @@ export function Terminal() {
           "  clear             Clear terminal",
           "  exit              Close terminal and reset",
           "  quit, logout      Same as exit",
-          "  Esc               Same as exit (when terminal is open)",
+          "  Esc               Close terminal (keeps session)",
           "",
           "Directories: ~, repos, devs, roles"
         ]
