@@ -9,6 +9,7 @@ import { useMessageDock } from "./message-dock-provider"
 import { useTerminal } from "./terminal-provider"
 
 const themes = [
+  { id: "auto", name: "Auto" },
   { id: "light", name: "Light" },
   { id: "dark", name: "VS Code Dark+" },
   { id: "monokai", name: "Monokai" },

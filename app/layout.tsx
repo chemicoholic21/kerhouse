@@ -46,9 +46,10 @@ export default function RootLayout({
       <body className={`${jetbrainsMono.variable} font-mono antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          themes={["light", "dark", "monokai", "dracula", "solarized", "nord"]}
+          defaultTheme="auto"
+          themes={["auto", "light", "dark", "monokai", "dracula", "solarized", "nord"]}
           disableTransitionOnChange
+          enableSystem={false}
         >
           <AuthProvider>
             <MessageDockProvider>
