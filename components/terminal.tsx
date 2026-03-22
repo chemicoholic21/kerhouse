@@ -496,7 +496,7 @@ export function Terminal() {
         className={`${dockedFrame} flex items-center justify-between gap-2 px-2 py-2 select-none`}
         onDoubleClick={() => setCollapsed(false)}
       >
-        <span className="text-xs font-bold text-muted-foreground truncate">Terminal</span>
+        <span className="text-xs font-bold text-highlight truncate">Terminal</span>
         <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
           <button
             type="button"
@@ -558,7 +558,7 @@ export function Terminal() {
             {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
-        <span className="text-xs font-bold text-muted-foreground truncate">Terminal</span>
+        <span className="text-xs font-bold text-highlight truncate">Terminal</span>
       </div>
 
       {/* Terminal content */}

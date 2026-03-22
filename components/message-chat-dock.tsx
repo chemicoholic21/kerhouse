@@ -65,7 +65,7 @@ export function MessageChatDock({
         <button
           type="button"
           onClick={() => setCollapsed(false)}
-          className="min-w-0 flex-1 text-left text-sm font-bold truncate hover:underline underline-offset-2"
+          className="min-w-0 flex-1 text-left text-sm font-bold text-highlight truncate hover:underline underline-offset-2"
           aria-expanded="false"
         >
           @{peerUsername}
@@ -113,7 +113,7 @@ export function MessageChatDock({
         className="flex items-center justify-between gap-2 px-3 py-2 border-b-2 border-foreground shrink-0 cursor-default"
         onDoubleClick={() => setCollapsed(true)}
       >
-        <p className="text-sm font-bold truncate min-w-0">@{peerUsername}</p>
+        <p className="text-sm font-bold text-highlight truncate min-w-0">@{peerUsername}</p>
         <div
           className="flex items-center gap-0.5 shrink-0"
           onDoubleClick={(e) => e.stopPropagation()}
