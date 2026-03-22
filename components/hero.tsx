@@ -1,17 +1,14 @@
-import Image from "next/image"
+import { HouseIllustration } from "@/components/house-illustration"
 
 export function Hero() {
   return (
     <section className="border-2 border-dashed border-foreground/70 my-8 p-8 md:p-12">
       <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
         <div className="w-full lg:w-1/2 max-w-xl">
-          <Image
-            src="/house-illustration.svg"
-            alt="ASCII art style illustration of a house with developers"
-            width={944}
-            height={620}
-            className="w-full h-auto invert-on-dark"
-            priority
+          <HouseIllustration
+            role="img"
+            aria-label="ASCII art style illustration of a house with developers"
+            className="w-full h-auto"
           />
         </div>
         

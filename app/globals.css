@@ -37,6 +37,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --house-illustration-fill: var(--background);
+  --house-illustration-stroke: var(--muted-foreground);
+  --house-illustration-detail: var(--foreground);
 }
 
 /* VS Code Dark+ */
@@ -215,13 +218,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Invert black/white SVGs for dark themes */
-.dark .invert-on-dark,
-.monokai .invert-on-dark,
-.dracula .invert-on-dark,
-.solarized .invert-on-dark,
-.nord .invert-on-dark {
-  filter: invert(1);
 }
