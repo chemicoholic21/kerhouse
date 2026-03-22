@@ -578,7 +578,7 @@ export function Terminal() {
       <div
         ref={contentRef}
         className={`p-3 overflow-y-auto font-mono text-sm ${
-          isMaximized ? "min-h-0 flex-1" : "h-[220px]"
+          isMaximized ? "min-h-0 flex-1" : "h-[248px]"
         }`}
         onClick={() => inputRef.current?.focus()}
       >
