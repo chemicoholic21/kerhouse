@@ -1,0 +1,32 @@
+import { Header } from "@/components/header"
+import { Hero } from "@/components/hero"
+import { WeeklyLeaderboard } from "@/components/weekly-leaderboard"
+import { ExploreProjects } from "@/components/explore-projects"
+
+export default function Home() {
+  return (
+    <div className="min-h-screen">
+      <Header />
+      
+      <main className="container mx-auto px-4 pb-12">
+        <Hero />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <WeeklyLeaderboard />
+          </div>
+          
+          <div>
+            <ExploreProjects />
+          </div>
+        </div>
+      </main>
+      
+      <footer className="border-t-2 border-dashed border-foreground/70 py-6">
+        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+          <p>© 2026 hackerhou.se. A home for human programmers.</p>
+        </div>
+      </footer>
+    </div>
+  )
+}
