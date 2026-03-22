@@ -16,6 +16,8 @@ export interface Repo {
 }
 
 export interface Developer {
+  /** Display name (e.g. for directory / profile headers) */
+  name: string
   username: string
   skills: string[]
   repos: number
@@ -205,31 +207,31 @@ export const repos: Repo[] = [
 ]
 
 export const developers: Developer[] = [
-  { username: "njbrake", skills: ["TypeScript", "React", "Python"], repos: 62, followers: 9100, language: "TypeScript", country: "USA" },
-  { username: "azure-sdk", skills: ["Python", "Go", "Docker"], repos: 188, followers: 8200, language: "Python", country: "USA" },
-  { username: "1c7", skills: ["React", "TypeScript", "Rust"], repos: 94, followers: 7800, language: "TypeScript", country: "Japan" },
-  { username: "peters", skills: ["Go", "Kubernetes", "AWS"], repos: 51, followers: 6500, language: "Go", country: "UK" },
-  { username: "bradygaster", skills: ["TypeScript", "React", "Docker"], repos: 73, followers: 5900, language: "TypeScript", country: "USA" },
-  { username: "jarrodwatts", skills: ["JavaScript", "React", "Python"], repos: 88, followers: 11200, language: "JavaScript", country: "Australia" },
-  { username: "ColeMurray", skills: ["Python", "Rust", "Kubernetes"], repos: 45, followers: 4800, language: "Python", country: "USA" },
-  { username: "davideast", skills: ["TypeScript", "Go", "AWS"], repos: 56, followers: 9200, language: "TypeScript", country: "USA" },
-  { username: "hkaiser", skills: ["Rust", "Go", "Docker"], repos: 412, followers: 3400, language: "Rust", country: "Germany" },
-  { username: "lukasmasuch", skills: ["Python", "Kubernetes", "AWS"], repos: 67, followers: 5100, language: "Python", country: "Germany" },
-  { username: "homanp", skills: ["Python", "Docker", "Go"], repos: 39, followers: 4200, language: "Python", country: "Sweden" },
-  { username: "elie222", skills: ["TypeScript", "React", "Python"], repos: 58, followers: 6700, language: "TypeScript", country: "Israel" },
-  { username: "ko3n1g", skills: ["Python", "Kubernetes", "AWS"], repos: 44, followers: 8900, language: "Python", country: "USA" },
-  { username: "JonnyBurger", skills: ["TypeScript", "React", "Docker"], repos: 91, followers: 13400, language: "TypeScript", country: "Switzerland" },
-  { username: "omeraplak", skills: ["TypeScript", "React", "Go"], repos: 52, followers: 6100, language: "TypeScript", country: "Turkey" },
-  { username: "jamiepine", skills: ["JavaScript", "React", "Python"], repos: 48, followers: 7200, language: "JavaScript", country: "UK" },
-  { username: "RichardAtCT", skills: ["Python", "Docker", "Kubernetes"], repos: 36, followers: 3900, language: "Python", country: "USA" },
-  { username: "theovilardo", skills: ["Rust", "Go", "AWS"], repos: 29, followers: 2800, language: "Rust", country: "Italy" },
-  { username: "dreamhunter2333", skills: ["Go", "Kubernetes", "Docker"], repos: 71, followers: 5500, language: "Go", country: "China" },
-  { username: "mitchellh", skills: ["Go", "Rust", "Kubernetes"], repos: 156, followers: 22100, language: "Go", country: "USA" },
-  { username: "niels9001", skills: ["TypeScript", "React", "AWS"], repos: 63, followers: 4400, language: "TypeScript", country: "Netherlands" },
-  { username: "ruvnet", skills: ["Python", "Rust", "Docker"], repos: 77, followers: 5100, language: "Python", country: "USA" },
-  { username: "rolfbjarne", skills: ["TypeScript", "Go", "Kubernetes"], repos: 203, followers: 9800, language: "TypeScript", country: "Norway" },
-  { username: "jackwener", skills: ["Rust", "Go", "AWS"], repos: 54, followers: 4600, language: "Rust", country: "China" },
-  { username: "0xSero", skills: ["Python", "Kubernetes", "Docker"], repos: 33, followers: 3100, language: "Python", country: "USA" },
+  { name: "Nick Brake", username: "njbrake", skills: ["TypeScript", "React", "Python"], repos: 62, followers: 9100, language: "TypeScript", country: "USA" },
+  { name: "Azure SDK", username: "azure-sdk", skills: ["Python", "Go", "Docker"], repos: 188, followers: 8200, language: "Python", country: "USA" },
+  { name: "Yi Chen", username: "1c7", skills: ["React", "TypeScript", "Rust"], repos: 94, followers: 7800, language: "TypeScript", country: "Japan" },
+  { name: "Peter Stevens", username: "peters", skills: ["Go", "Kubernetes", "AWS"], repos: 51, followers: 6500, language: "Go", country: "UK" },
+  { name: "Brady Gaster", username: "bradygaster", skills: ["TypeScript", "React", "Docker"], repos: 73, followers: 5900, language: "TypeScript", country: "USA" },
+  { name: "Jarrod Watts", username: "jarrodwatts", skills: ["JavaScript", "React", "Python"], repos: 88, followers: 11200, language: "JavaScript", country: "Australia" },
+  { name: "Cole Murray", username: "ColeMurray", skills: ["Python", "Rust", "Kubernetes"], repos: 45, followers: 4800, language: "Python", country: "USA" },
+  { name: "David East", username: "davideast", skills: ["TypeScript", "Go", "AWS"], repos: 56, followers: 9200, language: "TypeScript", country: "USA" },
+  { name: "Hartmut Kaiser", username: "hkaiser", skills: ["Rust", "Go", "Docker"], repos: 412, followers: 3400, language: "Rust", country: "Germany" },
+  { name: "Lukas Masuch", username: "lukasmasuch", skills: ["Python", "Kubernetes", "AWS"], repos: 67, followers: 5100, language: "Python", country: "Germany" },
+  { name: "Per Homan", username: "homanp", skills: ["Python", "Docker", "Go"], repos: 39, followers: 4200, language: "Python", country: "Sweden" },
+  { name: "Elie Steinbock", username: "elie222", skills: ["TypeScript", "React", "Python"], repos: 58, followers: 6700, language: "TypeScript", country: "Israel" },
+  { name: "Chris König", username: "ko3n1g", skills: ["Python", "Kubernetes", "AWS"], repos: 44, followers: 8900, language: "Python", country: "USA" },
+  { name: "Jonny Burger", username: "JonnyBurger", skills: ["TypeScript", "React", "Docker"], repos: 91, followers: 13400, language: "TypeScript", country: "Switzerland" },
+  { name: "Ömer Aplak", username: "omeraplak", skills: ["TypeScript", "React", "Go"], repos: 52, followers: 6100, language: "TypeScript", country: "Turkey" },
+  { name: "Jamie Pine", username: "jamiepine", skills: ["JavaScript", "React", "Python"], repos: 48, followers: 7200, language: "JavaScript", country: "UK" },
+  { name: "Richard Thompson", username: "RichardAtCT", skills: ["Python", "Docker", "Kubernetes"], repos: 36, followers: 3900, language: "Python", country: "USA" },
+  { name: "Theo Vilardo", username: "theovilardo", skills: ["Rust", "Go", "AWS"], repos: 29, followers: 2800, language: "Rust", country: "Italy" },
+  { name: "Hunter Li", username: "dreamhunter2333", skills: ["Go", "Kubernetes", "Docker"], repos: 71, followers: 5500, language: "Go", country: "China" },
+  { name: "Mitchell Hashimoto", username: "mitchellh", skills: ["Go", "Rust", "Kubernetes"], repos: 156, followers: 22100, language: "Go", country: "USA" },
+  { name: "Niels Laute", username: "niels9001", skills: ["TypeScript", "React", "AWS"], repos: 63, followers: 4400, language: "TypeScript", country: "Netherlands" },
+  { name: "Ruben Verborgh", username: "ruvnet", skills: ["Python", "Rust", "Docker"], repos: 77, followers: 5100, language: "Python", country: "USA" },
+  { name: "Rolf Bjarne Kvinge", username: "rolfbjarne", skills: ["TypeScript", "Go", "Kubernetes"], repos: 203, followers: 9800, language: "TypeScript", country: "Norway" },
+  { name: "Jack Wener", username: "jackwener", skills: ["Rust", "Go", "AWS"], repos: 54, followers: 4600, language: "Rust", country: "China" },
+  { name: "Sero Park", username: "0xSero", skills: ["Python", "Kubernetes", "Docker"], repos: 33, followers: 3100, language: "Python", country: "USA" },
 ]
 
 export const languages = [

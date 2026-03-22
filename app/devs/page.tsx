@@ -4,10 +4,41 @@ import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { User, ChevronDown, TrendingUp } from "lucide-react"
+import type { Developer } from "@/lib/data"
 import { developers, languages, countries, skillsList } from "@/lib/data"
+
+/** Same top-five values as `weekly-leaderboard` for consistency */
+const DEMO_IMPACT_TOP = [16881.3, 15241.2, 12787.8, 12340.0, 11324.6] as const
+
+function impactScore(dev: Developer): number {
+  const i = developers.findIndex((d) => d.username === dev.username)
+  if (i >= 0 && i < DEMO_IMPACT_TOP.length) return DEMO_IMPACT_TOP[i]!
+  const h = dev.username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
+  return Math.round((6200 + (h % 4200) + dev.repos * 2.8 + dev.followers * 0.11) * 10) / 10
+}
+
+function devTopics(dev: Developer): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  const push = (t: string) => {
+    if (seen.has(t)) return
+    seen.add(t)
+    out.push(t)
+  }
+  push(dev.language)
+  for (const s of dev.skills) push(s)
+  return out
+}
 
 function formatRank(n: number) {
   return String(n).padStart(2, "0")
+}
+
+function formatScore(n: number) {
+  return n.toLocaleString("en-US", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  })
 }
 
 function Dropdown({ 
@@ -73,12 +104,14 @@ export default function DevsPage() {
   const [selectedLanguage, setSelectedLanguage] = useState("all")
   const [selectedCountry, setSelectedCountry] = useState("all")
 
-  const filteredDevs = developers.filter((dev) => {
-    const skillMatch = selectedSkill === "all" || dev.skills.includes(selectedSkill)
-    const languageMatch = selectedLanguage === "all" || dev.language === selectedLanguage
-    const countryMatch = selectedCountry === "all" || dev.country === selectedCountry
-    return skillMatch && languageMatch && countryMatch
-  })
+  const filteredDevs = developers
+    .filter((dev) => {
+      const skillMatch = selectedSkill === "all" || dev.skills.includes(selectedSkill)
+      const languageMatch = selectedLanguage === "all" || dev.language === selectedLanguage
+      const countryMatch = selectedCountry === "all" || dev.country === selectedCountry
+      return skillMatch && languageMatch && countryMatch
+    })
+    .sort((a, b) => impactScore(b) - impactScore(a))
 
   return (
     <div className="min-h-screen">
@@ -146,45 +179,42 @@ export default function DevsPage() {
             </div>
 
             <div className="overflow-x-auto -mx-1 px-1">
-              <div className="border-y border-foreground min-w-[min(100%,36rem)]">
-                <div className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,7rem)_auto_auto_auto] gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
+              <div className="border-y border-foreground min-w-[min(100%,32rem)]">
+                <div className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_auto] gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
                   <span className="text-right">#</span>
-                  <span>Engineer</span>
-                  <span className="truncate min-w-0">Skills</span>
-                  <span className="text-right whitespace-nowrap">Stack</span>
-                  <span className="text-right tabular-nums whitespace-nowrap">Repos</span>
-                  <span className="text-right tabular-nums whitespace-nowrap">Follow</span>
+                  <span>Name</span>
+                  <span className="truncate min-w-0">Handle</span>
+                  <span className="truncate min-w-0">Location</span>
+                  <span className="truncate min-w-0">Topics</span>
+                  <span className="text-right tabular-nums whitespace-nowrap">Score</span>
                 </div>
                 <div className="divide-y divide-foreground">
                   {filteredDevs.map((dev, index) => (
                     <Link
                       key={dev.username}
                       href={`/${dev.username}`}
-                      className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,7rem)_auto_auto_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background cursor-pointer group/link min-w-[min(100%,36rem)]"
+                      className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background cursor-pointer group/link min-w-[min(100%,40rem)]"
                     >
                       <span className="text-right text-sm tabular-nums">
                         {formatRank(index + 1)}
                       </span>
                       <div className="flex items-center gap-2 min-w-0">
                         <User className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-                        <div className="flex flex-col min-w-0 text-sm leading-tight">
-                          <span className="truncate group-hover/link:underline font-medium">
-                            {dev.username}
-                          </span>
-                          <span className="truncate text-muted-foreground text-xs group-hover/link:text-background/80">
-                            {dev.country}
-                          </span>
-                        </div>
+                        <span className="truncate text-sm font-medium group-hover/link:underline min-w-0">
+                          {dev.name}
+                        </span>
                       </div>
+                      <span className="text-sm font-mono truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
+                        {dev.username}
+                      </span>
                       <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                        {dev.skills.join(" · ")}
+                        {dev.country}
+                      </span>
+                      <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
+                        {devTopics(dev).join(" · ")}
                       </span>
                       <span className="text-sm text-right tabular-nums whitespace-nowrap">
-                        {dev.language}
-                      </span>
-                      <span className="text-sm text-right tabular-nums">{dev.repos}</span>
-                      <span className="text-sm text-right tabular-nums">
-                        {dev.followers.toLocaleString("en-US")}
+                        {formatScore(impactScore(dev))}
                       </span>
                     </Link>
                   ))}

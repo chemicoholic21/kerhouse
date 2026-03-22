@@ -66,8 +66,8 @@ export function MessageChatDock({
   const dockFrame =
     "fixed z-[100] bottom-0 left-2 right-5 sm:left-auto sm:right-5 sm:w-[360px] border-2 border-foreground bg-background/90 backdrop-blur-sm"
 
-  const headerTitle = isInbox ? "Inbox" : `@${peerUsername}`
-  const collapsedLabel = isInbox ? "Inbox" : `@${peerUsername}`
+  const headerTitle = isInbox ? "Inbox" : peerUsername
+  const collapsedLabel = isInbox ? "Inbox" : peerUsername
 
   if (collapsed) {
     return (
@@ -173,7 +173,7 @@ export function MessageChatDock({
                 >
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="font-bold text-highlight text-sm group-hover/inboxrow:text-background">
-                      @{t.peer}
+                      {t.peer}
                     </span>
                     <span className="text-xs text-muted-foreground tabular-nums shrink-0 group-hover/inboxrow:text-background/80">
                       {t.time}
@@ -202,7 +202,7 @@ export function MessageChatDock({
                   className={`max-w-[95%] min-w-0 ${showHeader ? (i === 0 ? "" : "mt-4") : "mt-1.5"}`}
                 >
                   {showHeader ? (
-                    <p className="text-[10px] font-mono text-muted-foreground mb-1">@{label}</p>
+                    <p className="text-[10px] font-mono text-muted-foreground mb-1">{label}</p>
                   ) : null}
                   <p className="leading-snug text-foreground">{m.text}</p>
                   {showTime ? (

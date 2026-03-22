@@ -17,7 +17,7 @@ export function ProfileMessageSidebar({ targetUsername }: { targetUsername: stri
     <section className="border-2 border-foreground p-5">
       <h2 className="text-sm font-bold mb-2">Message</h2>
       <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
-        Send a direct message as <span className="font-mono text-foreground">@{session.username}</span>.
+        Send a direct message as <span className="font-mono text-foreground">{session.username}</span>.
         Prototype — nothing is delivered.
       </p>
       <Link

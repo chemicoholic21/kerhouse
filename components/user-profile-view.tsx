@@ -40,7 +40,8 @@ export function UserProfileView({ dev }: { dev: Developer }) {
   return (
     <>
       <main className="layout-container py-8">
-        <h1 className="text-2xl font-bold mb-8 lg:mb-10 text-highlight">{dev.username}</h1>
+        <h1 className="text-2xl font-bold mb-1 lg:mb-2 text-highlight">{dev.name}</h1>
+        <p className="text-sm text-muted-foreground mb-8 lg:mb-10">{dev.username}</p>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-10">
           <section className="border-2 border-foreground p-5 sm:p-6 lg:col-span-8 min-w-0">
@@ -49,8 +50,8 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                 <User className="w-8 h-8 sm:w-10 sm:h-10 text-highlight" strokeWidth={2} />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-bold text-lg sm:text-xl text-highlight">{dev.username}</div>
-                <div className="text-sm text-muted-foreground">@{dev.username}</div>
+                <div className="font-bold text-lg sm:text-xl text-highlight">{dev.name}</div>
+                <div className="text-sm text-muted-foreground">{dev.username}</div>
                 <p className="text-sm mt-3 leading-relaxed max-w-prose">{p.bio}</p>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">

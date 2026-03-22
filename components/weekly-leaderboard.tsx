@@ -6,7 +6,7 @@ const demoScores = [16881.3, 15241.2, 12787.8, 12340.0, 11324.6] as const
 
 const leaderboardData = developers.slice(0, demoScores.length).map((d, i) => ({
   rank: i + 1,
-  name: d.username,
+  name: d.name,
   handle: d.username,
   score: demoScores[i]!,
 }))
