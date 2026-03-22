@@ -573,12 +573,21 @@ export function Terminal() {
       className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))] relative"
       }`}
     >
+      {!isMaximized ? (
+        <div
+          className="absolute top-0 left-0 right-0 h-2 z-10 cursor-ns-resize touch-none"
+          onMouseDown={onResizeDragMouseDown}
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Resize terminal height"
+        />
+      ) : null}
       {/* Title bar — same layout as message dock: title left, icons right */}
       <div
-        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center gap-2 select-none cursor-default"
+        className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
         onDoubleClick={() => {
           if (isMaximized) {
             setIsMaximized(false)
@@ -587,19 +596,7 @@ export function Terminal() {
           }
         }}
       >
-        <p className="text-sm font-bold text-highlight truncate min-w-0 shrink-0">Terminal</p>
-        {!isMaximized ? (
-          <div
-            className="flex-1 min-w-0 min-h-8 cursor-ns-resize touch-none"
-            onMouseDown={onResizeDragMouseDown}
-            onDoubleClick={(e) => e.stopPropagation()}
-            role="separator"
-            aria-orientation="horizontal"
-            aria-label="Resize terminal height"
-          />
-        ) : (
-          <div className="flex-1 min-w-0" />
-        )}
+        <p className="text-sm font-bold text-highlight truncate min-w-0">Terminal</p>
         <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
           {!isMaximized ? (
             <button
