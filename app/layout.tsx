@@ -14,8 +14,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'devhouse | a home for developers',
-  description: 'Discover open source repos, meet developers, find roles, and more.',
+  title: 'hackerhou.se | a home for human programmers',
+  description:
+    'Discover open source projects, meet developers, find roles, and more — a home for human programmers.',
   generator: 'v0.app',
   icons: {
     icon: [
