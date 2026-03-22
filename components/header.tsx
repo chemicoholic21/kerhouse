@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Home, Palette, TerminalSquare } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
+import { developers } from "@/lib/data"
 import { useTerminal } from "./terminal-provider"
 
 const themes = [
@@ -50,7 +51,9 @@ export function Header() {
             <Link href="/repos" className="hover:underline underline-offset-4">Repos</Link>
             <Link href="/devs" className="hover:underline underline-offset-4">Devs</Link>
             <Link href="/roles" className="hover:underline underline-offset-4">Roles</Link>
-            <Link href="/profile" className="hover:underline underline-offset-4">Profile</Link>
+            <Link href={`/${developers[0]?.username ?? "njbrake"}`} className="hover:underline underline-offset-4">
+              Profile
+            </Link>
           </nav>
         </div>
         

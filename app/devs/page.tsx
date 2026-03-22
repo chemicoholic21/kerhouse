@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { User, ChevronDown } from "lucide-react"
 import { developers, languages, countries, skillsList } from "@/lib/data"
@@ -130,9 +131,10 @@ export default function DevsPage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredDevs.map((dev) => (
-            <div 
+            <Link
               key={dev.username}
-              className="border-2 border-foreground p-4 transition-colors cursor-pointer group"
+              href={`/${dev.username}`}
+              className="border-2 border-foreground p-4 transition-colors cursor-pointer group block hover:bg-foreground/[0.03]"
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">
@@ -143,7 +145,7 @@ export default function DevsPage() {
                   <span className="text-xs text-muted-foreground">{dev.country}</span>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-1.5 mb-3">
                 {dev.skills.map((skill) => (
                   <span key={skill} className="border border-foreground px-1.5 py-0.5 text-xs">
@@ -151,12 +153,12 @@ export default function DevsPage() {
                   </span>
                 ))}
               </div>
-              
+
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span>{dev.repos} repos</span>
                 <span>{dev.followers} followers</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
