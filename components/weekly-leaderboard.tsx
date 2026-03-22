@@ -26,8 +26,8 @@ export function WeeklyLeaderboard() {
   return (
     <section className="border-2 border-dashed border-foreground/70 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" />
+        <h2 className="text-xl font-bold flex items-center gap-2 text-highlight">
+          <TrendingUp className="w-5 h-5 shrink-0" strokeWidth={2.5} />
           Leaderboard
         </h2>
       </div>

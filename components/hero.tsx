@@ -14,7 +14,7 @@ export function Hero() {
         
         <div className="flex-1 text-center lg:text-left">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-balance leading-tight">
-            a home for human programmers
+            a home for <span className="text-highlight">human</span> programmers
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto lg:mx-0">
             discover open source projects, learn essential skills, and find meaningful work

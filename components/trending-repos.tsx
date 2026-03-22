@@ -90,7 +90,7 @@ export function TrendingRepos() {
   return (
     <section>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold">
+        <h2 className="text-xl font-bold text-highlight">
           Trending {viewMode === "repos" ? "Repositories" : "Issues"}
         </h2>
         <div className="flex border-2 border-foreground">
@@ -150,10 +150,10 @@ export function TrendingRepos() {
             >
               <div className="flex items-start gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">
-                  <IconComponent className="w-6 h-6" />
+                  <IconComponent className="w-6 h-6 text-highlight" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm break-all group-hover:underline">
+                  <div className="font-bold text-sm break-all group-hover:underline text-highlight">
                     {repo.name}
                   </div>
                   <span className="text-xs capitalize text-muted-foreground">

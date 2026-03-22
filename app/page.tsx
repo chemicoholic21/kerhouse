@@ -24,7 +24,9 @@ export default function Home() {
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
         <div className="layout-container text-center text-sm text-muted-foreground">
-          <p>© 2026 hackerhou.se. A home for human programmers.</p>
+          <p>
+            © 2026 hackerhou.se. A home for <span className="text-highlight">human</span> programmers.
+          </p>
         </div>
       </footer>
     </div>

@@ -82,7 +82,7 @@ export default function DevsPage() {
       
       <main className="layout-container py-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">Find Developers</h2>
+          <h2 className="text-xl font-bold text-highlight">Find Developers</h2>
           <div className="flex border-2 border-foreground">
             <button
               type="button"
@@ -138,10 +138,10 @@ export default function DevsPage() {
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">
-                  <User className="w-5 h-5" />
+                  <User className="w-5 h-5 text-highlight" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <span className="font-bold block group-hover:underline">{dev.username}</span>
+                  <span className="font-bold block group-hover:underline text-highlight">{dev.username}</span>
                   <span className="text-xs text-muted-foreground">{dev.country}</span>
                 </div>
               </div>
@@ -171,7 +171,9 @@ export default function DevsPage() {
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
         <div className="layout-container text-center text-sm">
-          <p>© 2026 hackerhou.se. A home for human programmers.</p>
+          <p>
+            © 2026 hackerhou.se. A home for <span className="text-highlight">human</span> programmers.
+          </p>
         </div>
       </footer>
     </div>

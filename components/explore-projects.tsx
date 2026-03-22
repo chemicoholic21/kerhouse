@@ -22,8 +22,8 @@ const trendingTags = [
 export function ExploreProjects() {
   return (
     <section className="border-2 border-dashed border-foreground/70 p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Hash className="w-5 h-5" />
+      <div className="flex items-center gap-2 mb-6 text-highlight">
+        <Hash className="w-5 h-5 shrink-0" strokeWidth={2.5} />
         <h2 className="text-xl font-bold">Explore Projects</h2>
       </div>
 

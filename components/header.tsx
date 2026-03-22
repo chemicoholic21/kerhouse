@@ -113,7 +113,7 @@ export function Header() {
               type="button"
               onClick={signIn}
               disabled={!ready}
-              className="border-2 border-foreground px-4 py-0.5 font-medium hover:bg-foreground hover:text-background transition-colors disabled:opacity-50"
+              className="border-2 border-highlight px-4 py-0.5 font-medium text-highlight hover:bg-highlight hover:text-highlight-foreground transition-colors disabled:opacity-50"
             >
               Sign in
             </button>

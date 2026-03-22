@@ -98,14 +98,14 @@ export default function RolesPage() {
       <Header />
 
       <main className="layout-container py-8">
-        <h2 className="text-xl font-bold mb-6">Find Your Next Role</h2>
+        <h2 className="text-xl font-bold mb-6 text-highlight">Find Your Next Role</h2>
 
         <div className="flex flex-wrap gap-3 mb-4">
           <Dropdown label="Workplace" value={workplace} options={roleWorkplaceOptions} onChange={setWorkplace} />
         </div>
 
         <div className="mb-6">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2">Skills</p>
+          <p className="text-xs font-bold uppercase tracking-wide text-highlight mb-2">Skills</p>
           <div className="flex flex-wrap gap-2">
             {roleTechnicalSkillFilters.map((skill) => {
               const on = selectedSkills.has(skill)
@@ -133,10 +133,10 @@ export default function RolesPage() {
             >
               <div className="flex items-start gap-3 mb-2">
                 <div className="border-2 border-foreground p-1.5 shrink-0">
-                  <Briefcase className="w-4 h-4" aria-hidden />
+                  <Briefcase className="w-4 h-4 text-highlight" aria-hidden strokeWidth={2.5} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold group-hover:underline leading-snug">{role.title}</div>
+                  <div className="font-bold group-hover:underline leading-snug text-highlight">{role.title}</div>
                   <div className="text-sm text-muted-foreground mt-1">{role.company}</div>
                 </div>
               </div>
@@ -164,7 +164,9 @@ export default function RolesPage() {
 
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
         <div className="layout-container text-center text-sm">
-          <p>© 2026 hackerhou.se. A home for human programmers.</p>
+          <p>
+            © 2026 hackerhou.se. A home for <span className="text-highlight">human</span> programmers.
+          </p>
         </div>
       </footer>
     </div>
