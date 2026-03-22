@@ -1,4 +1,5 @@
 import { Header } from "@/components/header"
+import { YcJobsList } from "@/components/yc-jobs-list"
 import { Briefcase, MapPin } from "lucide-react"
 import { roles } from "@/lib/data"
 
@@ -7,8 +8,11 @@ export default function RolesPage() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="layout-container py-8">
-        <h2 className="text-xl font-bold mb-6">Find Your Next Role</h2>
+      <main className="layout-container py-8 space-y-10">
+        <YcJobsList />
+
+        <section className="space-y-6">
+        <h2 className="text-xl font-bold">Browse roles</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {roles.map((role, index) => (
@@ -41,6 +45,7 @@ export default function RolesPage() {
             </div>
           ))}
         </div>
+        </section>
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
