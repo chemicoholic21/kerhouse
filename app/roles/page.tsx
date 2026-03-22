@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useMemo, useState, useRef, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Briefcase, ChevronDown, MapPin } from "lucide-react"
@@ -9,6 +10,16 @@ import {
   roleTechnicalSkillFilters,
   isTechnicalRole,
 } from "@/lib/data"
+
+/** Match homepage / profile skill tags: lowercase, hyphenated query */
+function reposTagHref(label: string) {
+  const slug = label
+    .toLowerCase()
+    .trim()
+    .replace(/\s*\/\s*/g, "-")
+    .replace(/\s+/g, "-")
+  return `/repos?tag=${encodeURIComponent(slug)}`
+}
 
 function Dropdown({
   label,
@@ -110,16 +121,19 @@ export default function RolesPage() {
             {roleTechnicalSkillFilters.map((skill) => {
               const on = selectedSkills.has(skill)
               return (
-                <button
+                <Link
                   key={skill}
-                  type="button"
-                  onClick={() => toggleSkill(skill)}
-                  className={`border-2 border-foreground px-2.5 py-1 text-xs ${
-                    on ? "bg-foreground text-background" : "hover:bg-foreground/10"
+                  href={reposTagHref(skill)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    toggleSkill(skill)
+                  }}
+                  className={`border-2 border-foreground px-2.5 py-1 text-xs cursor-pointer ${
+                    on ? "bg-foreground text-background" : "hover:bg-foreground hover:text-background"
                   }`}
                 >
                   {skill}
-                </button>
+                </Link>
               )
             })}
           </div>
