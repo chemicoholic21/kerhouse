@@ -38,7 +38,7 @@ export function Header() {
 
   return (
     <header className="border-b-2 border-dashed border-foreground/70 py-4">
-      <div className="container mx-auto px-4 flex items-center justify-between">
+      <div className="layout-container flex items-center justify-between">
         <div className="flex items-center gap-8 translate-y-0.5">
           <Link href="/" className="flex items-center gap-2 text-lg font-bold">
             <Home className="w-5 h-5" strokeWidth={2.5} />

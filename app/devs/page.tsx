@@ -79,7 +79,7 @@ export default function DevsPage() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="layout-container py-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold">Find Developers</h2>
           <div className="flex border-2 border-foreground">
@@ -165,7 +165,7 @@ export default function DevsPage() {
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
-        <div className="container mx-auto px-4 text-center text-sm">
+        <div className="layout-container text-center text-sm">
           <p>© 2026 hackerhou.se. A home for human programmers.</p>
         </div>
       </footer>

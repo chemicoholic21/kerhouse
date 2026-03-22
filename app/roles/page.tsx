@@ -7,7 +7,7 @@ export default function RolesPage() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="layout-container py-8">
         <h2 className="text-xl font-bold mb-6">Find Your Next Role</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -44,7 +44,7 @@ export default function RolesPage() {
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
-        <div className="container mx-auto px-4 text-center text-sm">
+        <div className="layout-container text-center text-sm">
           <p>© 2026 hackerhou.se. A home for human programmers.</p>
         </div>
       </footer>

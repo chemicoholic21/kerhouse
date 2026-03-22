@@ -8,7 +8,7 @@ export default function Home() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="container mx-auto px-4 pb-12">
+      <main className="layout-container pb-12">
         <Hero />
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -23,7 +23,7 @@ export default function Home() {
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+        <div className="layout-container text-center text-sm text-muted-foreground">
           <p>© 2026 hackerhou.se. A home for human programmers.</p>
         </div>
       </footer>
