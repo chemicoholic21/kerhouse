@@ -179,46 +179,45 @@ export default function DevsPage() {
             </div>
 
             <div className="overflow-x-auto -mx-1 px-1">
-              <div className="border-y border-foreground min-w-[min(100%,32rem)]">
-                <div className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_auto] gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
-                  <span className="text-right">#</span>
-                  <span>Name</span>
-                  <span className="truncate min-w-0">Handle</span>
-                  <span className="truncate min-w-0">Location</span>
-                  <span className="truncate min-w-0">Topics</span>
+              {/* Fixed score column width so header + rows share identical tracks (auto width was shifting 1fr columns). */}
+              <div className="border-y border-foreground min-w-[min(100%,40rem)] grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_7rem] gap-x-3">
+                <div className="col-span-full grid grid-cols-subgrid gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
+                  <span className="text-right tabular-nums">#</span>
+                  <span className="min-w-0 text-left">Name</span>
+                  <span className="min-w-0 truncate text-left">Handle</span>
+                  <span className="min-w-0 truncate text-left">Location</span>
+                  <span className="min-w-0 truncate text-left">Topics</span>
                   <span className="text-right tabular-nums whitespace-nowrap">Score</span>
                 </div>
-                <div className="divide-y divide-foreground">
-                  {filteredDevs.map((dev, index) => (
-                    <Link
-                      key={dev.username}
-                      href={`/${dev.username}`}
-                      className="grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background cursor-pointer group/link min-w-[min(100%,40rem)]"
-                    >
-                      <span className="text-right text-sm tabular-nums">
-                        {formatRank(index + 1)}
+                {filteredDevs.map((dev, index) => (
+                  <Link
+                    key={dev.username}
+                    href={`/${dev.username}`}
+                    className="col-span-full grid grid-cols-subgrid gap-x-3 items-center border-b border-foreground py-[11px] px-2 last:border-b-0 hover:bg-foreground hover:text-background cursor-pointer group/link"
+                  >
+                    <span className="text-right text-sm tabular-nums">
+                      {formatRank(index + 1)}
+                    </span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <User className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
+                      <span className="truncate text-sm font-medium group-hover/link:underline min-w-0">
+                        {dev.name}
                       </span>
-                      <div className="flex items-center gap-2 min-w-0">
-                        <User className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-                        <span className="truncate text-sm font-medium group-hover/link:underline min-w-0">
-                          {dev.name}
-                        </span>
-                      </div>
-                      <span className="text-sm font-mono truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                        {dev.username}
-                      </span>
-                      <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                        {dev.country}
-                      </span>
-                      <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                        {devTopics(dev).join(" · ")}
-                      </span>
-                      <span className="text-sm text-right tabular-nums whitespace-nowrap">
-                        {formatScore(impactScore(dev))}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+                    </div>
+                    <span className="text-sm font-mono truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
+                      {dev.username}
+                    </span>
+                    <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
+                      {dev.country}
+                    </span>
+                    <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
+                      {devTopics(dev).join(" · ")}
+                    </span>
+                    <span className="text-sm text-right tabular-nums whitespace-nowrap">
+                      {formatScore(impactScore(dev))}
+                    </span>
+                  </Link>
+                ))}
               </div>
             </div>
           </section>
