@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Header } from "@/components/header"
+import { TrendingDevelopersList } from "@/components/trending-developers-list"
 import { User, ChevronDown } from "lucide-react"
 import { developers, languages, countries, skillsList } from "@/lib/data"
 
@@ -79,23 +80,29 @@ export default function DevsPage() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="layout-container py-8">
+      <main className="layout-container py-8 space-y-10">
+        <TrendingDevelopersList />
+
+        <section className="space-y-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">Find Developers</h2>
+          <h2 className="text-xl font-bold">Browse developers</h2>
           <div className="flex border-2 border-foreground">
             <button
+              type="button"
               onClick={() => setOpenTo("all")}
               className={`px-3 py-1 text-sm transition-colors ${openTo === "all" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
               All
             </button>
             <button
+              type="button"
               onClick={() => setOpenTo("mentorship")}
               className={`px-3 py-1 text-sm transition-colors ${openTo === "mentorship" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
               Mentorship
             </button>
             <button
+              type="button"
               onClick={() => setOpenTo("work")}
               className={`px-3 py-1 text-sm transition-colors ${openTo === "work" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
@@ -162,6 +169,7 @@ export default function DevsPage() {
             <p>No developers match the selected filters.</p>
           </div>
         )}
+        </section>
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
