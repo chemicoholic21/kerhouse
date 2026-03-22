@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { AuthProvider } from '@/components/auth-provider'
+import { MessageDockProvider } from '@/components/message-dock-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TerminalProvider } from '@/components/terminal-provider'
 import { Terminal } from '@/components/terminal'
@@ -50,10 +51,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <TerminalProvider>
-              {children}
-              <Terminal />
-            </TerminalProvider>
+            <MessageDockProvider>
+              <TerminalProvider>
+                {children}
+                <Terminal />
+              </TerminalProvider>
+            </MessageDockProvider>
           </AuthProvider>
         </ThemeProvider>
         <Analytics />
