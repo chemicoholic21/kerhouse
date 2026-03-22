@@ -179,7 +179,6 @@ export function MessageChatDock({
               </li>
             ))}
           </ul>
-          <p className="text-xs text-muted-foreground px-3 py-2">Prototype — not stored.</p>
         </div>
       ) : (
         <>
