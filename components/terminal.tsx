@@ -22,6 +22,151 @@ const pathToDirectory: Record<string, Directory> = {
   "/roles": "roles"
 }
 
+const BASE_COMMANDS = [
+  "about",
+  "cat",
+  "cd",
+  "clear",
+  "date",
+  "echo",
+  "exit",
+  "help",
+  "ls",
+  "pwd",
+  "whoami",
+] as const
+
+function longestCommonPrefix(strings: string[]): string {
+  if (strings.length === 0) return ""
+  const lows = strings.map((s) => s.toLowerCase())
+  let i = 0
+  for (;;) {
+    const ch = lows[0][i]
+    if (ch === undefined) break
+    if (!lows.every((s) => s[i] === ch)) break
+    i++
+  }
+  return strings[0].slice(0, i)
+}
+
+function wantsTrailingSpace(cmd: string): boolean {
+  return cmd === "cd" || cmd === "cat" || cmd === "echo"
+}
+
+function catItemList(currentDir: Directory): string[] {
+  if (currentDir === "repos") {
+    return repos.map((r, i) => `${i + 1}_${r.name.split("/")[1]}`)
+  }
+  if (currentDir === "devs") {
+    return developers.map((d, i) => `${i + 1}_${d.username}`)
+  }
+  if (currentDir === "roles") {
+    return roles.map((r, i) => `${i + 1}_${r.title.toLowerCase().replace(/\s+/g, "_")}`)
+  }
+  return []
+}
+
+type TabOutcome =
+  | { kind: "input"; value: string }
+  | { kind: "list"; matches: string[] }
+  | { kind: "none" }
+
+function computeTabCompletion(
+  input: string,
+  currentDir: Directory
+): TabOutcome {
+  const lead = input.match(/^(\s*)/)?.[1] ?? ""
+  const body = input.slice(lead.length)
+
+  const onlyCmd = body.match(/^(\S+)$/)
+  if (onlyCmd) {
+    const partial = onlyCmd[1].toLowerCase()
+    const matches = BASE_COMMANDS.filter((c) => c.startsWith(partial))
+    if (matches.length === 0) return { kind: "none" }
+    if (matches.length === 1) {
+      const c = matches[0]
+      return {
+        kind: "input",
+        value: lead + c + (wantsTrailingSpace(c) ? " " : ""),
+      }
+    }
+    const lcp = longestCommonPrefix([...matches])
+    if (lcp.length > partial.length) {
+      return { kind: "input", value: lead + lcp }
+    }
+    return { kind: "list", matches: [...matches] }
+  }
+
+  const cmdAndRest = body.match(/^(\S+)\s+(.*)$/)
+  if (!cmdAndRest) return { kind: "none" }
+
+  const cmd = cmdAndRest[1].toLowerCase()
+  const rest = cmdAndRest[2]
+
+  if (cmd === "echo") {
+    return { kind: "none" }
+  }
+
+  const firstWord = rest.split(/\s+/)[0] ?? ""
+  const partial = firstWord.toLowerCase()
+  const afterFirst = rest.slice(firstWord.length)
+
+  if (cmd === "cd") {
+    if (rest.trim().split(/\s+/).filter(Boolean).length > 1) {
+      return { kind: "none" }
+    }
+    const partialNorm = partial.replace(/\/+$/, "")
+    const candidates =
+      currentDir === "~"
+        ? ["repos", "devs", "roles", "~", ".."]
+        : ["..", "~"]
+    const matches = candidates.filter((d) =>
+      d.toLowerCase().startsWith(partialNorm)
+    )
+    if (matches.length === 0) return { kind: "none" }
+    if (matches.length === 1) {
+      return {
+        kind: "input",
+        value: `${lead}cd ${matches[0]}${afterFirst}`,
+      }
+    }
+    const lcp = longestCommonPrefix(matches)
+    if (lcp.toLowerCase().length > partialNorm.length) {
+      return { kind: "input", value: `${lead}cd ${lcp}${afterFirst}` }
+    }
+    return { kind: "list", matches }
+  }
+
+  if (cmd === "cat") {
+    if (rest.trim().split(/\s+/).filter(Boolean).length > 1) {
+      return { kind: "none" }
+    }
+    const items = catItemList(currentDir)
+    if (items.length === 0) return { kind: "none" }
+    const matches = items.filter((it) => {
+      const low = it.toLowerCase()
+      if (low.startsWith(partial)) return true
+      const u = low.indexOf("_")
+      if (u === -1) return false
+      return low.slice(u + 1).startsWith(partial)
+    })
+    if (matches.length === 0) return { kind: "none" }
+    if (matches.length === 1) {
+      return {
+        kind: "input",
+        value: `${lead}cat ${matches[0]}${afterFirst}`,
+      }
+    }
+    const lcp = longestCommonPrefix(matches)
+    if (lcp.toLowerCase().length > partial.length) {
+      return { kind: "input", value: `${lead}cat ${lcp}${afterFirst}` }
+    }
+    return { kind: "list", matches }
+  }
+
+  return { kind: "none" }
+}
+
 export function Terminal() {
   const router = useRouter()
   const pathname = usePathname()
@@ -341,40 +486,11 @@ export function Terminal() {
       }
     } else if (e.key === "Tab") {
       e.preventDefault()
-      const baseCommands = ["help", "about", "whoami", "date", "echo", "ls", "cd", "pwd", "cat", "clear", "exit"]
-      
-      // Handle cd tab completion
-      if (input.startsWith("cd ")) {
-        const partial = input.slice(3).toLowerCase()
-        let dirs: string[] = []
-        if (currentDir === "~") {
-          dirs = ["repos", "devs", "roles", "~", ".."]
-        } else {
-          dirs = ["..", "~"]
-        }
-        const matches = dirs.filter(d => d.startsWith(partial))
-        if (matches.length === 1) {
-          setInput(`cd ${matches[0]}`)
-        }
-      } else if (input.startsWith("cat ")) {
-        const partial = input.slice(4).toLowerCase()
-        let items: string[] = []
-        if (currentDir === "repos") {
-          items = repos.map((r, i) => `${i + 1}_${r.name.split("/")[1]}`)
-        } else if (currentDir === "devs") {
-          items = developers.map((d, i) => `${i + 1}_${d.username}`)
-        } else if (currentDir === "roles") {
-          items = roles.map((r, i) => `${i + 1}_${r.title.toLowerCase().replace(/\s+/g, "_")}`)
-        }
-        const matches = items.filter(i => i.toLowerCase().startsWith(partial))
-        if (matches.length === 1) {
-          setInput(`cat ${matches[0]}`)
-        }
-      } else {
-        const matches = baseCommands.filter(c => c.startsWith(input.toLowerCase()))
-        if (matches.length === 1) {
-          setInput(matches[0])
-        }
+      const outcome = computeTabCompletion(input, currentDir)
+      if (outcome.kind === "list") {
+        setHistory((prev) => [...prev, outcome.matches.join("  ")])
+      } else if (outcome.kind === "input") {
+        setInput(outcome.value)
       }
     }
   }
