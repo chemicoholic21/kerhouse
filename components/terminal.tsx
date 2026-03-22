@@ -187,8 +187,10 @@ export function Terminal() {
   const pendingKeysRef = useRef("")
   const isOpenRef = useRef(isOpen)
   const openTerminalRef = useRef(openTerminal)
+  const closeTerminalRef = useRef(closeTerminal)
   isOpenRef.current = isOpen
   openTerminalRef.current = openTerminal
+  closeTerminalRef.current = closeTerminal
 
   const resetTerminalUi = useCallback(() => {
     setHistory([])
@@ -207,6 +209,17 @@ export function Terminal() {
     }
     wasOpenRef.current = isOpen
   }, [isOpen, resetTerminalUi])
+
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return
+      e.preventDefault()
+      closeTerminalRef.current()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [isOpen])
 
   useEffect(() => {
     setMounted(true)
@@ -313,6 +326,7 @@ export function Terminal() {
           "  clear             Clear terminal",
           "  exit              Close terminal and reset",
           "  quit, logout      Same as exit",
+          "  Esc               Same as exit (when terminal is open)",
           "",
           "Directories: ~, repos, devs, roles"
         ]
