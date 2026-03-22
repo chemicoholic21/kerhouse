@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Header } from "@/components/header"
 import { UserProfileView } from "@/components/user-profile-view"
@@ -5,6 +6,20 @@ import { developers } from "@/lib/data"
 
 export function generateStaticParams() {
   return developers.map((d) => ({ username: d.username }))
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}): Promise<Metadata> {
+  const { username: raw } = await params
+  const username = decodeURIComponent(raw)
+  const dev = developers.find((d) => d.username === username)
+  if (!dev) return { title: "Profile" }
+  return {
+    title: `${dev.username} | hackerhou.se`,
+  }
 }
 
 export default async function UserProfilePage({
