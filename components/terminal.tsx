@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { ChevronUp, Maximize2, Minimize2, X } from "lucide-react"
+import { ChevronUp, Maximize2, Minimize2, Minus, X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTerminal } from "./terminal-provider"
 import { repos, developers, roles } from "@/lib/data"
@@ -486,27 +486,35 @@ export function Terminal() {
 
   if (!isOpen) return null
 
+  /* Mirror chat dock width (360px) on the left: sm:left-4 sm:right-auto */
   const dockedFrame =
-    "fixed z-[100] border-2 border-foreground bg-background bottom-0 left-4 right-4 sm:left-4 sm:right-auto sm:w-[600px] sm:max-w-[min(600px,calc(100vw-2rem))]"
+    "fixed z-[100] border-2 border-foreground bg-background bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[360px]"
 
   if (collapsed && !isMaximized) {
     return (
       <div
         ref={terminalRef}
-        className={`${dockedFrame} flex items-center justify-between gap-2 px-2 py-2 select-none`}
+        className={`${dockedFrame} flex items-center justify-between gap-2 px-3 py-2 select-none`}
         onDoubleClick={() => setCollapsed(false)}
       >
-        <span className="text-xs font-bold text-highlight truncate">Terminal</span>
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          className="min-w-0 flex-1 text-left text-sm font-bold text-highlight truncate hover:underline underline-offset-2"
+          aria-expanded="false"
+        >
+          Terminal
+        </button>
         <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
           <button
             type="button"
-            className="hover:bg-foreground/10 p-1"
+            className="p-1 hover:bg-foreground/10"
             onClick={() => setCollapsed(false)}
             aria-label="Expand"
           >
             <ChevronUp className="w-4 h-4" />
           </button>
-          <button type="button" className="hover:bg-foreground/10 p-1" onClick={closeTerminal} aria-label="Close">
+          <button type="button" className="p-1 hover:bg-foreground/10" onClick={closeTerminal} aria-label="Close">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -520,12 +528,12 @@ export function Terminal() {
       className={`fixed z-[100] border-2 border-foreground bg-background ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-4 right-4 sm:left-4 sm:right-auto sm:w-[600px] sm:max-w-[min(600px,calc(100vw-2rem))]"
+          : "bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[360px]"
       }`}
     >
-      {/* Title bar */}
+      {/* Title bar — same layout as message dock: title left, icons right */}
       <div
-        className="shrink-0 border-b-2 border-foreground bg-background px-2 py-2 flex items-center select-none gap-2 cursor-default"
+        className="shrink-0 border-b-2 border-foreground bg-background px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
         onDoubleClick={() => {
           if (isMaximized) {
             setIsMaximized(false)
@@ -534,18 +542,21 @@ export function Terminal() {
           }
         }}
       >
-        <div className="flex items-center gap-0.5" onDoubleClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-bold text-highlight truncate min-w-0">Terminal</p>
+        <div className="flex items-center gap-0.5 shrink-0" onDoubleClick={(e) => e.stopPropagation()}>
+          {!isMaximized ? (
+            <button
+              type="button"
+              className="p-1 hover:bg-foreground/10"
+              onClick={() => setCollapsed(true)}
+              aria-label="Collapse"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+          ) : null}
           <button
             type="button"
-            className="hover:bg-foreground/10 p-1"
-            onClick={closeTerminal}
-            aria-label="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            className="hover:bg-foreground/10 p-1"
+            className="p-1 hover:bg-foreground/10"
             onClick={() => {
               setIsMaximized((m) => {
                 const next = !m
@@ -557,8 +568,10 @@ export function Terminal() {
           >
             {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
+          <button type="button" className="p-1 hover:bg-foreground/10" onClick={closeTerminal} aria-label="Close">
+            <X className="w-4 h-4" />
+          </button>
         </div>
-        <span className="text-xs font-bold text-highlight truncate">Terminal</span>
       </div>
 
       {/* Terminal content */}
