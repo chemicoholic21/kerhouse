@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { X, Maximize2 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTerminal } from "./terminal-provider"
@@ -32,7 +32,9 @@ const BASE_COMMANDS = [
   "exit",
   "help",
   "ls",
+  "logout",
   "pwd",
+  "quit",
   "whoami",
 ] as const
 
@@ -190,6 +192,26 @@ export function Terminal() {
   isOpenRef.current = isOpen
   openTerminalRef.current = openTerminal
 
+  const resetTerminalUi = useCallback(() => {
+    setHistory([])
+    setInput("")
+    setCommandHistory([])
+    setHistoryIndex(-1)
+    pendingKeysRef.current = ""
+    setIsMaximized(false)
+    setPosition({ x: 100, y: 100 })
+    setIsDragging(false)
+    setDragOffset({ x: 0, y: 0 })
+  }, [])
+
+  const wasOpenRef = useRef(false)
+  useEffect(() => {
+    if (wasOpenRef.current && !isOpen) {
+      resetTerminalUi()
+    }
+    wasOpenRef.current = isOpen
+  }, [isOpen, resetTerminalUi])
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -329,7 +351,8 @@ export function Terminal() {
           "  cat <item>        Show item details (in repos/devs/roles)",
           "",
           "  clear             Clear terminal",
-          "  exit              Close terminal",
+          "  exit              Close terminal; reset session & go to ~",
+          "  quit, logout      Same as exit",
           "",
           "Directories: ~, repos, devs, roles"
         ]
@@ -448,6 +471,9 @@ export function Terminal() {
         return
 
       case "exit":
+      case "quit":
+      case "logout":
+        navigateTo("~")
         closeTerminal()
         return
 
