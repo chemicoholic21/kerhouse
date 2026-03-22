@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { HouseIllustration } from "@/components/house-illustration"
 
 export function Hero() {
@@ -20,12 +21,18 @@ export function Hero() {
             discover open source projects, learn essential skills, and find meaningful work
           </p>
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-            <button className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors">
+            <Link
+              href="/repos"
+              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+            >
               Explore Repos
-            </button>
-            <button className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors">
-              Find Developers
-            </button>
+            </Link>
+            <Link
+              href="/devs"
+              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+            >
+              Developer Rankings
+            </Link>
           </div>
         </div>
       </div>
