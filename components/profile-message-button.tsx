@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { MessageCircle } from "lucide-react"
 import { useAuth } from "./auth-provider"
 import { useMessageDock } from "./message-dock-provider"
@@ -19,14 +20,17 @@ export function ProfileMessageSidebar({ targetUsername }: { targetUsername: stri
         Send a direct message as <span className="font-mono text-foreground">@{session.username}</span>.
         Prototype — nothing is delivered.
       </p>
-      <button
-        type="button"
-        onClick={() => openMessageDock(targetUsername)}
-        className="w-full border-2 border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background transition-colors inline-flex items-center justify-center gap-2"
+      <Link
+        href={`/${targetUsername}`}
+        onClick={(e) => {
+          e.preventDefault()
+          openMessageDock(targetUsername)
+        }}
+        className="w-full border-2 border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
       >
         <MessageCircle className="w-4 h-4" aria-hidden strokeWidth={2.5} />
         Message
-      </button>
+      </Link>
     </section>
   )
 }
