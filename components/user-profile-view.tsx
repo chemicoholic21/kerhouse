@@ -94,7 +94,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               </p>
             </section>
 
-            <section className="border-2 border-foreground p-5">
+            <section className="border-2 border-dashed border-foreground/70 p-5">
               <h2 className="text-sm font-bold uppercase tracking-wide text-highlight mb-4">Skills</h2>
               <p className="text-xs text-muted-foreground mb-2">Strong in</p>
               <div className="flex flex-wrap gap-1.5 mb-5">
