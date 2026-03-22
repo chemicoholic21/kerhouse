@@ -24,12 +24,47 @@ export interface Developer {
   country: string
 }
 
+export type RoleWorkplace = "remote" | "onsite" | "hybrid"
+export type RoleArea =
+  | "engineering"
+  | "product"
+  | "design"
+  | "sales"
+  | "gtm"
+  | "security"
+  | "data"
+  | "ml"
+  | "customer_success"
+  | "intern"
+
 export interface Role {
   title: string
   company: string
-  location: string
+  workplace: RoleWorkplace
+  area: RoleArea
   tags: string[]
 }
+
+export const roleWorkplaceOptions: { value: RoleWorkplace | "all"; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "remote", label: "Remote" },
+  { value: "onsite", label: "On-site" },
+  { value: "hybrid", label: "Hybrid" },
+]
+
+export const roleAreaOptions: { value: RoleArea | "all"; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "engineering", label: "Engineering" },
+  { value: "product", label: "Product" },
+  { value: "design", label: "Design" },
+  { value: "sales", label: "Sales" },
+  { value: "gtm", label: "GTM" },
+  { value: "security", label: "Security" },
+  { value: "data", label: "Data" },
+  { value: "ml", label: "ML / AI" },
+  { value: "customer_success", label: "Customer success" },
+  { value: "intern", label: "Internship" },
+]
 
 export const repos: Repo[] = [
   {
@@ -213,36 +248,36 @@ export const skillsList = [
 ]
 
 export const roles: Role[] = [
-  { title: "Ndea (YC W26) is hiring a symbolic RL search guidance lead", company: "Ndea", location: "Remote", tags: ["3 days ago", "ndea.com"] },
-  { title: "Spice Data (YC S19) Is Hiring a Product Specialist", company: "Spice Data", location: "Remote", tags: ["4 days ago", "ycombinator.com"] },
-  { title: "AnswerThis (YC F25) Is Hiring", company: "AnswerThis", location: "Remote", tags: ["5 days ago", "ycombinator.com"] },
-  { title: "Kaizen (YC P25) Hiring Eng, GTM, Cos to Automate BPOs", company: "Kaizen", location: "Remote", tags: ["5 days ago", "kaizenautomation.com"] },
-  { title: "Nango (YC W23, API Access for Agents and Apps) Is Hiring", company: "Nango", location: "Remote", tags: ["5 days ago", "ashbyhq.com"] },
-  { title: "9 Mothers Defense (YC P26) Is Hiring in Austin", company: "9 Mothers Defense", location: "Austin, TX", tags: ["7 days ago", "ashbyhq.com"] },
-  { title: "Converge (YC S23) Is Hiring a Founding Platform Engineer (NYC, Onsite)", company: "Converge", location: "New York, NY", tags: ["9 days ago", "runconverge.com"] },
-  { title: "Hive (YC S14) is hiring scrappy product managers and product/data engineers", company: "Hive", location: "Remote", tags: ["9 days ago", "ashbyhq.com"] },
-  { title: "Meticulous (YC S21) is hiring to redefine software dev", company: "Meticulous", location: "Remote", tags: ["10 days ago", "ashbyhq.com"] },
-  { title: "SigNoz (YC W21) is hiring for engineering, growth and product roles", company: "SigNoz", location: "Remote", tags: ["14 days ago", "signoz.io"] },
-  { title: "Multifactor (YC F25) Is Hiring an Engineering Lead", company: "Multifactor", location: "Remote", tags: ["15 days ago", "ycombinator.com"] },
-  { title: "Stardex (YC S21) is hiring customer success engineers", company: "Stardex", location: "Remote", tags: ["15 days ago", "ycombinator.com"] },
-  { title: "Structured AI (YC F25) Is Hiring", company: "Structured AI", location: "Remote", tags: ["16 days ago", "ycombinator.com"] },
-  { title: "Roboflow (YC S20) Is Hiring a Security Engineer for AI Infra", company: "Roboflow", location: "Remote", tags: ["17 days ago", "roboflow.com"] },
-  { title: "Jiga (YC W21) Is Hiring", company: "Jiga", location: "Remote", tags: ["17 days ago", "jiga.io"] },
-  { title: "Reflex (YC W23) Is Hiring Software Engineers – Python", company: "Reflex", location: "Remote", tags: ["19 days ago", "ycombinator.com"] },
-  { title: "Kyber (YC W23) Is Hiring an Enterprise Account Executive", company: "Kyber", location: "Remote", tags: ["22 days ago", "ycombinator.com"] },
-  { title: "Ubicloud (YC W24): Software Engineer – $95-$250K in Turkey, Netherlands, CA", company: "Ubicloud", location: "Turkey · NL · CA", tags: ["22 days ago", "ycombinator.com"] },
-  { title: "LiteLLM (YC W23): Founding Reliability Engineer – $200K-$270K and 0.5-1.0% equity", company: "LiteLLM", location: "Remote", tags: ["23 days ago", "ycombinator.com"] },
-  { title: "Bild AI (YC W25) Is Hiring Interns to Make Housing Affordable", company: "Bild AI", location: "Remote", tags: ["23 days ago", "workatastartup.com"] },
-  { title: "Hightouch (YC S19) Is Hiring", company: "Hightouch", location: "Remote", tags: ["23 days ago", "hightouch.com"] },
-  { title: "Trellis AI (YC W24) is hiring deployment lead to accelerate medication access", company: "Trellis AI", location: "Remote", tags: ["24 days ago", "ycombinator.com"] },
-  { title: "Event Horizon Labs (YC W24) Is Hiring", company: "Event Horizon Labs", location: "Remote", tags: ["24 days ago", "ycombinator.com"] },
-  { title: "Corgi Labs (YC W23) Is Hiring", company: "Corgi Labs", location: "Remote", tags: ["25 days ago", "ycombinator.com"] },
-  { title: "Verge (YC S15) Is Hiring a Director of Computational Biology and AI Scientists/Eng", company: "Verge", location: "Remote", tags: ["25 days ago", "ashbyhq.com"] },
-  { title: "SIM (YC X25) Is Hiring the Best Engineers in San Francisco", company: "SIM", location: "San Francisco, CA", tags: ["26 days ago", "ycombinator.com"] },
-  { title: "Hadrius (YC W23) Is Hiring Designers Who Code", company: "Hadrius", location: "Remote", tags: ["26 days ago", "ycombinator.com"] },
-  { title: "Bitmovin (YC S15) Is Hiring Interns in AI for Summer 2026 in Austria", company: "Bitmovin", location: "Austria", tags: ["26 days ago", "bitmovin.com"] },
-  { title: "Padlet (YC W13) Is Hiring in San Francisco and Singapore", company: "Padlet", location: "San Francisco · Singapore", tags: ["28 days ago", "padlet.jobs"] },
-  { title: "Legion Health (YC) Is Hiring Cracked SWEs for Autonomous Mental Health", company: "Legion Health", location: "Remote", tags: ["29 days ago", "ashbyhq.com"] },
+  { title: "Symbolic RL search guidance lead", company: "Ndea", workplace: "remote", area: "ml", tags: ["Reinforcement learning", "Research", "Staff"] },
+  { title: "Product specialist", company: "Spice Data", workplace: "remote", area: "product", tags: ["B2B", "Data tooling", "Customer-facing"] },
+  { title: "Software engineer", company: "AnswerThis", workplace: "remote", area: "engineering", tags: ["Full stack", "Early team"] },
+  { title: "Engineer, GTM, or ops — BPO automation", company: "Kaizen", workplace: "remote", area: "gtm", tags: ["Automation", "Operations", "Multi-role"] },
+  { title: "Software engineer", company: "Nango", workplace: "remote", area: "engineering", tags: ["APIs", "Integrations", "Agents"] },
+  { title: "Software engineer", company: "9 Mothers Defense", workplace: "onsite", area: "engineering", tags: ["Austin, TX", "Defense", "Systems"] },
+  { title: "Founding platform engineer", company: "Converge", workplace: "onsite", area: "engineering", tags: ["New York, NY", "Infrastructure", "Founding"] },
+  { title: "Product manager or product / data engineer", company: "Hive", workplace: "remote", area: "product", tags: ["Data products", "Analytics", "Scrappy"] },
+  { title: "Software engineer", company: "Meticulous", workplace: "remote", area: "engineering", tags: ["Developer tools", "Testing", "Product quality"] },
+  { title: "Open roles — engineering, growth, product", company: "SigNoz", workplace: "remote", area: "engineering", tags: ["Observability", "Open source", "Multi-track"] },
+  { title: "Engineering lead", company: "Multifactor", workplace: "remote", area: "engineering", tags: ["Leadership", "Identity", "Security-adjacent"] },
+  { title: "Customer success engineer", company: "Stardex", workplace: "remote", area: "customer_success", tags: ["Technical CSM", "Onboarding", "Support"] },
+  { title: "Software engineer", company: "Structured AI", workplace: "remote", area: "engineering", tags: ["Structured data", "AI"] },
+  { title: "Security engineer — AI infrastructure", company: "Roboflow", workplace: "remote", area: "security", tags: ["AI infra", "Cloud", "Hardening"] },
+  { title: "Software engineer", company: "Jiga", workplace: "remote", area: "engineering", tags: ["Manufacturing", "Supply chain", "Full stack"] },
+  { title: "Software engineer (Python)", company: "Reflex", workplace: "remote", area: "engineering", tags: ["Python", "Web framework", "Open source"] },
+  { title: "Enterprise account executive", company: "Kyber", workplace: "remote", area: "sales", tags: ["Enterprise", "B2B", "Closing"] },
+  { title: "Software engineer", company: "Ubicloud", workplace: "hybrid", area: "engineering", tags: ["Turkey", "Netherlands", "California", "Cloud"] },
+  { title: "Founding reliability engineer", company: "LiteLLM", workplace: "remote", area: "engineering", tags: ["SRE", "LLM infra", "Founding"] },
+  { title: "Engineering intern — housing", company: "Bild AI", workplace: "remote", area: "intern", tags: ["Housing", "Impact", "Summer"] },
+  { title: "Software engineer", company: "Hightouch", workplace: "remote", area: "engineering", tags: ["Data activation", "Reverse ETL"] },
+  { title: "Deployment lead", company: "Trellis AI", workplace: "remote", area: "gtm", tags: ["Healthcare", "Medication access", "Implementation"] },
+  { title: "Software engineer", company: "Event Horizon Labs", workplace: "remote", area: "engineering", tags: ["Deep tech", "Early team"] },
+  { title: "Software engineer", company: "Corgi Labs", workplace: "remote", area: "engineering", tags: ["Applied research", "Small team"] },
+  { title: "Director of computational biology or AI scientist / engineer", company: "Verge", workplace: "remote", area: "ml", tags: ["Comp bio", "Drug discovery", "Research"] },
+  { title: "Software engineer", company: "SIM", workplace: "onsite", area: "engineering", tags: ["San Francisco, CA", "Systems", "High bar"] },
+  { title: "Designer who codes", company: "Hadrius", workplace: "remote", area: "design", tags: ["Product design", "Frontend", "Prototyping"] },
+  { title: "AI engineering intern", company: "Bitmovin", workplace: "onsite", area: "intern", tags: ["Austria", "Summer 2026", "Video"] },
+  { title: "Software engineer", company: "Padlet", workplace: "hybrid", area: "engineering", tags: ["San Francisco", "Singapore", "Collaboration"] },
+  { title: "Software engineer — mental health automation", company: "Legion Health", workplace: "remote", area: "engineering", tags: ["Healthcare", "Autonomy", "Backend"] },
 ]
 
 export const categories: { value: Category; label: string }[] = [

@@ -454,8 +454,9 @@ export function Terminal() {
             output = [
               `Title: ${r.title}`,
               `Company: ${r.company}`,
-              `Location: ${r.location}`,
-              `Skills: ${r.tags.join(", ")}`
+              `Workplace: ${r.workplace}`,
+              `Area: ${r.area}`,
+              `Tags: ${r.tags.join(", ")}`
             ]
           } else if (currentDir === "~") {
             output = ["cat: use 'cd' to enter a directory first"]
