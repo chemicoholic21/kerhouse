@@ -176,6 +176,8 @@ export function Terminal() {
   const [mounted, setMounted] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  /** Scroll area height when docked (px); title + handle are separate. */
+  const [dockedContentHeight, setDockedContentHeight] = useState(248)
   const [input, setInput] = useState("")
   const [currentDir, setCurrentDir] = useState<Directory>("~")
   const [commandHistory, setCommandHistory] = useState<string[]>([])
@@ -202,6 +204,7 @@ export function Terminal() {
     pendingKeysRef.current = ""
     setIsMaximized(false)
     setCollapsed(false)
+    setDockedContentHeight(248)
   }, [])
 
   const wasOpenRef = useRef(false)
@@ -541,15 +544,47 @@ export function Terminal() {
     )
   }
 
+  const onResizeHandleMouseDown = (e: React.MouseEvent) => {
+    if (isMaximized) return
+    e.preventDefault()
+    const startY = e.clientY
+    const startH = dockedContentHeight
+    document.body.style.userSelect = "none"
+
+    const maxContent = () => Math.min(560, window.innerHeight - 140)
+    const onMove = (ev: MouseEvent) => {
+      const delta = startY - ev.clientY
+      setDockedContentHeight(
+        Math.max(120, Math.min(maxContent(), startH + delta))
+      )
+    }
+    const onUp = () => {
+      document.body.style.userSelect = ""
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("mouseup", onUp)
+    }
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("mouseup", onUp)
+  }
+
   return (
     <div
       ref={terminalRef}
       className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))] flex flex-col"
       }`}
     >
+      {!isMaximized ? (
+        <div
+          className="h-2 shrink-0 cursor-ns-resize border-b border-foreground/40 hover:bg-foreground/10"
+          onMouseDown={onResizeHandleMouseDown}
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Resize terminal height"
+        />
+      ) : null}
       {/* Title bar — same layout as message dock: title left, icons right */}
       <div
         className="shrink-0 border-b-2 border-foreground bg-transparent px-3 py-2 flex items-center justify-between gap-2 select-none cursor-default"
@@ -597,8 +632,9 @@ export function Terminal() {
       <div
         ref={contentRef}
         className={`p-3 overflow-y-auto font-mono text-sm ${
-          isMaximized ? "min-h-0 flex-1" : "h-[248px]"
+          isMaximized ? "min-h-0 flex-1" : "shrink-0"
         }`}
+        style={isMaximized ? undefined : { height: dockedContentHeight }}
         onClick={() => inputRef.current?.focus()}
       >
         {history.map((line, i) => (
