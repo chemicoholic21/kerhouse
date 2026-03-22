@@ -507,7 +507,7 @@ export function Terminal() {
 
   /* Docked terminal: wider / shorter panel than the message dock */
   const dockedFrame =
-    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm bottom-2 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
 
   if (collapsed && !isMaximized) {
     return (
@@ -547,7 +547,7 @@ export function Terminal() {
       className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-2 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
       }`}
     >
       {/* Title bar — same layout as message dock: title left, icons right */}

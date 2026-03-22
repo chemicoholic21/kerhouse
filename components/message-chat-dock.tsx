@@ -64,7 +64,7 @@ export function MessageChatDock({
   if (!open) return null
 
   const dockFrame =
-    "fixed z-[100] bottom-2 left-2 right-5 sm:left-auto sm:right-5 sm:w-[360px] border-2 border-foreground bg-background/90 backdrop-blur-sm"
+    "fixed z-[100] bottom-0 left-2 right-5 sm:left-auto sm:right-5 sm:w-[360px] border-2 border-foreground bg-background/90 backdrop-blur-sm"
 
   const headerTitle = isInbox ? "Inbox" : `@${peerUsername}`
   const collapsedLabel = isInbox ? "Inbox" : `@${peerUsername}`
