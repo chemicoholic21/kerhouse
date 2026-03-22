@@ -457,6 +457,7 @@ export function Terminal() {
               `Location: ${r.location}`,
               `Workplace: ${r.workplace}`,
               `Area: ${r.area}`,
+              `Skills: ${r.skills.length ? r.skills.join(", ") : "—"}`,
               `Tags: ${r.tags.join(", ")}`
             ]
           } else if (currentDir === "~") {

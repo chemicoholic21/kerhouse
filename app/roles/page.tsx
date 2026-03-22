@@ -1,9 +1,14 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useMemo, useState, useRef, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Briefcase, ChevronDown, MapPin } from "lucide-react"
-import { roles, roleWorkplaceOptions, roleAreaOptions } from "@/lib/data"
+import {
+  roles,
+  roleWorkplaceOptions,
+  roleTechnicalSkillFilters,
+  isTechnicalRole,
+} from "@/lib/data"
 
 function Dropdown({
   label,
@@ -68,12 +73,24 @@ function Dropdown({
 
 export default function RolesPage() {
   const [workplace, setWorkplace] = useState<string>("all")
-  const [area, setArea] = useState<string>("all")
+  const [selectedSkills, setSelectedSkills] = useState<Set<string>>(() => new Set())
 
-  const filtered = roles.filter((role) => {
+  const technicalRoles = useMemo(() => roles.filter(isTechnicalRole), [])
+
+  const toggleSkill = (skill: string) => {
+    setSelectedSkills((prev) => {
+      const next = new Set(prev)
+      if (next.has(skill)) next.delete(skill)
+      else next.add(skill)
+      return next
+    })
+  }
+
+  const filtered = technicalRoles.filter((role) => {
     const w = workplace === "all" || role.workplace === workplace
-    const a = area === "all" || role.area === area
-    return w && a
+    if (selectedSkills.size === 0) return w
+    const skillMatch = role.skills.some((s) => selectedSkills.has(s))
+    return w && skillMatch
   })
 
   return (
@@ -83,9 +100,29 @@ export default function RolesPage() {
       <main className="layout-container py-8">
         <h2 className="text-xl font-bold mb-6">Find Your Next Role</h2>
 
-        <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex flex-wrap gap-3 mb-4">
           <Dropdown label="Workplace" value={workplace} options={roleWorkplaceOptions} onChange={setWorkplace} />
-          <Dropdown label="Area" value={area} options={roleAreaOptions} onChange={setArea} />
+        </div>
+
+        <div className="mb-6">
+          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2">Skills</p>
+          <div className="flex flex-wrap gap-2">
+            {roleTechnicalSkillFilters.map((skill) => {
+              const on = selectedSkills.has(skill)
+              return (
+                <button
+                  key={skill}
+                  type="button"
+                  onClick={() => toggleSkill(skill)}
+                  className={`border-2 border-foreground px-2.5 py-1 text-xs transition-colors ${
+                    on ? "bg-foreground text-background" : "hover:bg-foreground/10"
+                  }`}
+                >
+                  {skill}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
