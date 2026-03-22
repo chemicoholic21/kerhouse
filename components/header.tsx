@@ -65,23 +65,25 @@ export function Header() {
             type="button"
             disabled={!ready}
             onClick={() => (session ? openInbox() : signIn())}
-            className="p-1 hover:text-muted-foreground transition-colors text-foreground disabled:opacity-50"
+            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label={session ? "Inbox" : "Sign in to open inbox"}
             title={session ? "Inbox" : "Sign in"}
           >
             <Inbox className="w-4 h-4" strokeWidth={2} />
           </button>
           <button
+            type="button"
             onClick={openTerminal}
-            className="p-1 hover:text-muted-foreground transition-colors"
+            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
             aria-label="Open terminal"
           >
             <TerminalSquare className="w-4 h-4" />
           </button>
           <div className="relative mr-3" ref={menuRef}>
             <button
+              type="button"
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-1 hover:text-muted-foreground transition-colors"
+              className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
               aria-label="Select theme"
             >
               <Palette className="w-4 h-4" />
@@ -95,7 +97,7 @@ export function Header() {
                       setTheme(t.id)
                       setMenuOpen(false)
                     }}
-                    className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
+                    className={`w-full cursor-pointer text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
                       theme === t.id ? "bg-foreground/10" : ""
                     }`}
                   >

@@ -168,7 +168,7 @@ export function MessageChatDock({
                 <button
                   type="button"
                   onClick={() => onOpenPeer(t.peer)}
-                  className="w-full text-left py-3 px-3 hover:bg-foreground/[0.04] transition-colors"
+                  className="w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground/[0.04] transition-colors"
                 >
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="font-bold text-highlight text-sm">@{t.peer}</span>
