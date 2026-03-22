@@ -169,7 +169,7 @@ export function MessageChatDock({
                 <Link
                   href={`/${t.peer}`}
                   onClick={() => onOpenPeer(t.peer)}
-                  className="group/inboxrow block w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground hover:text-background transition-colors"
+                  className="group/inboxrow block w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground hover:text-background"
                 >
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="font-bold text-highlight text-sm group-hover/inboxrow:text-background">
@@ -232,7 +232,7 @@ export function MessageChatDock({
               type="button"
               onClick={send}
               disabled={!draft.trim()}
-              className="shrink-0 border-2 border-foreground p-2 hover:bg-foreground hover:text-background transition-colors disabled:opacity-40 disabled:pointer-events-none"
+              className="shrink-0 border-2 border-foreground p-2 hover:bg-foreground hover:text-background disabled:opacity-40 disabled:pointer-events-none"
               aria-label="Send"
             >
               <Send className="w-4 h-4" />

@@ -41,12 +41,12 @@ function Dropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background transition-colors"
+        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background"
       >
         <span>
           {label}: {selectedLabel}
         </span>
-        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-3 h-3 ${isOpen ? "rotate-180" : ""}`} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 border-2 border-foreground bg-background z-50 min-w-full max-h-48 overflow-y-auto">
@@ -58,7 +58,7 @@ function Dropdown({
                 onChange(option.value)
                 setIsOpen(false)
               }}
-              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
+              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background ${
                 value === option.value ? "bg-foreground/10" : ""
               }`}
             >
@@ -114,7 +114,7 @@ export default function RolesPage() {
                   key={skill}
                   type="button"
                   onClick={() => toggleSkill(skill)}
-                  className={`border-2 border-foreground px-2.5 py-1 text-xs transition-colors ${
+                  className={`border-2 border-foreground px-2.5 py-1 text-xs ${
                     on ? "bg-foreground text-background" : "hover:bg-foreground/10"
                   }`}
                 >
@@ -129,7 +129,7 @@ export default function RolesPage() {
           {filtered.map((role, index) => (
             <div
               key={`${role.company}-${role.title}-${index}`}
-              className="border-2 border-foreground p-4 transition-colors cursor-pointer group"
+              className="border-2 border-foreground p-4 cursor-pointer group"
             >
               <div className="flex items-start gap-3 mb-2">
                 <div className="border-2 border-foreground p-1.5 shrink-0">

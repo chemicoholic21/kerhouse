@@ -26,7 +26,7 @@ export function ProfileMessageSidebar({ targetUsername }: { targetUsername: stri
           e.preventDefault()
           openMessageDock(targetUsername)
         }}
-        className="w-full border-2 border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
+        className="w-full border-2 border-foreground px-4 py-2 text-sm font-medium hover:bg-foreground hover:text-background inline-flex items-center justify-center gap-2 cursor-pointer"
       >
         <MessageCircle className="w-4 h-4" aria-hidden strokeWidth={2.5} />
         Message

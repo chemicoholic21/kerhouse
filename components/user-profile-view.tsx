@@ -64,7 +64,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     <Link
                       key={skill}
                       href={reposTagHref(skill)}
-                      className="border border-foreground px-1.5 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+                      className="border border-foreground px-1.5 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
                     >
                       {skill}
                     </Link>
@@ -101,7 +101,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                   <Link
                     key={s}
                     href={reposTagHref(s)}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
                   >
                     {s}
                   </Link>
@@ -113,7 +113,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                   <Link
                     key={s}
                     href={reposTagHref(s)}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-pointer"
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
                   >
                     {s}
                   </Link>
@@ -135,7 +135,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     href={contributionHref(c.repo)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group/contribution flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground hover:text-background transition-colors"
+                    className="group/contribution flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground hover:text-background"
                   >
                     <div className="border border-foreground p-1.5 shrink-0 mt-0.5 group-hover/contribution:border-background/40">
                       <Icon

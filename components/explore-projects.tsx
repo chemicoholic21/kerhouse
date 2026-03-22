@@ -32,7 +32,7 @@ export function ExploreProjects() {
           <Link
             key={tag}
             href={`/repos?tag=${tag}`}
-            className="border-2 border-foreground/50 px-3 py-1 text-sm hover:bg-foreground hover:text-background transition-colors"
+            className="border-2 border-foreground/50 px-3 py-1 text-sm hover:bg-foreground hover:text-background"
           >
             #{tag}
           </Link>

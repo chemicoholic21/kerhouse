@@ -23,13 +23,13 @@ export function Hero() {
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
             <Link
               href="/repos"
-              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background"
             >
               Explore Repos
             </Link>
             <Link
               href="/devs"
-              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors"
+              className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background"
             >
               Developer Rankings
             </Link>

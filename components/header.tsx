@@ -46,7 +46,7 @@ export function Header() {
         <div className="flex items-center gap-8 translate-y-0.5">
           <Link
             href="/"
-            className="flex items-center gap-2 text-lg font-bold text-brand hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2 text-lg font-bold text-brand hover:opacity-90"
           >
             <Home className="w-5 h-5" strokeWidth={2.5} />
             <span>hackerhou.se</span>
@@ -64,7 +64,7 @@ export function Header() {
           <button
             type="button"
             onClick={openTerminal}
-            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
+            className="p-1 cursor-pointer hover:text-muted-foreground"
             aria-label="Open terminal"
           >
             <TerminalSquare className="w-4 h-4" />
@@ -73,7 +73,7 @@ export function Header() {
             type="button"
             disabled={!ready}
             onClick={() => (session ? openInbox() : signIn())}
-            className="p-1 cursor-pointer hover:text-muted-foreground transition-colors text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 cursor-pointer hover:text-muted-foreground text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label={session ? "Inbox" : "Sign in to open inbox"}
             title={session ? "Inbox" : "Sign in"}
           >
@@ -83,7 +83,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-1 cursor-pointer hover:text-muted-foreground transition-colors"
+              className="p-1 cursor-pointer hover:text-muted-foreground"
               aria-label="Select theme"
             >
               <Palette className="w-4 h-4" />
@@ -97,7 +97,7 @@ export function Header() {
                       setTheme(t.id)
                       setMenuOpen(false)
                     }}
-                    className={`w-full cursor-pointer text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
+                    className={`w-full cursor-pointer text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background ${
                       theme === t.id ? "bg-foreground/10" : ""
                     }`}
                   >
@@ -111,7 +111,7 @@ export function Header() {
             <>
               <Link
                 href={`/${session.username}`}
-                className="p-1 border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
+                className="p-1 border-2 border-foreground hover:bg-foreground hover:text-background"
                 aria-label={`Profile (${session.username})`}
                 title={session.username}
               >
@@ -120,7 +120,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={signOut}
-                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background transition-colors"
+                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background"
               >
                 Sign out
               </button>
@@ -130,7 +130,7 @@ export function Header() {
               type="button"
               onClick={signIn}
               disabled={!ready}
-              className="border-2 border-highlight px-4 py-0.5 font-medium text-highlight hover:bg-highlight hover:text-highlight-foreground transition-colors disabled:opacity-50"
+              className="border-2 border-highlight px-4 py-0.5 font-medium text-highlight hover:bg-highlight hover:text-highlight-foreground disabled:opacity-50"
             >
               Sign in
             </button>

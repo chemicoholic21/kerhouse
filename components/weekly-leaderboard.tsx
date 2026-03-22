@@ -43,7 +43,7 @@ export function WeeklyLeaderboard() {
             <Link
               key={dev.handle}
               href={`/${dev.handle}`}
-              className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background transition-colors cursor-pointer group/link"
+              className="grid grid-cols-[2.5rem_1fr_auto] gap-x-3 items-center py-[11px] px-2 hover:bg-foreground hover:text-background cursor-pointer group/link"
             >
               <span className="text-right text-sm tabular-nums">
                 {formatRank(dev.rank)}

@@ -35,13 +35,13 @@ function Dropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background transition-colors"
+        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background"
       >
         <span>
           {label}: {selectedLabel}
         </span>
         <ChevronDown
-          className={`w-3 h-3 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-3 h-3 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
       {isOpen && (
@@ -54,7 +54,7 @@ function Dropdown({
                 onChange(option.value)
                 setIsOpen(false)
               }}
-              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
+              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background ${
                 value === option.value ? "bg-foreground/10" : ""
               }`}
             >
@@ -97,7 +97,7 @@ export function TrendingRepos() {
           <button
             type="button"
             onClick={() => setViewMode("repos")}
-            className={`px-3 py-1 text-sm transition-colors ${
+            className={`px-3 py-1 text-sm ${
               viewMode === "repos"
                 ? "bg-foreground text-background"
                 : "hover:bg-foreground/10"
@@ -108,7 +108,7 @@ export function TrendingRepos() {
           <button
             type="button"
             onClick={() => setViewMode("issues")}
-            className={`px-3 py-1 text-sm transition-colors ${
+            className={`px-3 py-1 text-sm ${
               viewMode === "issues"
                 ? "bg-foreground text-background"
                 : "hover:bg-foreground/10"
@@ -146,7 +146,7 @@ export function TrendingRepos() {
           return (
             <div
               key={repo.name}
-              className="border-2 border-foreground p-4 transition-colors cursor-pointer flex flex-col group"
+              className="border-2 border-foreground p-4 cursor-pointer flex flex-col group"
             >
               <div className="flex items-start gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">

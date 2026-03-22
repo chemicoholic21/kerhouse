@@ -36,10 +36,10 @@ function Dropdown({
     <div className="relative" ref={ref}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background transition-colors"
+        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background"
       >
         <span>{label}: {selectedLabel}</span>
-        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3 h-3 ${isOpen ? "rotate-180" : ""}`} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 border-2 border-foreground bg-background z-50 min-w-full max-h-48 overflow-y-auto">
@@ -50,7 +50,7 @@ function Dropdown({
                 onChange(option.value)
                 setIsOpen(false)
               }}
-              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background transition-colors ${
+              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background ${
                 value === option.value ? "bg-foreground/10" : ""
               }`}
             >
@@ -87,21 +87,21 @@ export default function DevsPage() {
             <button
               type="button"
               onClick={() => setOpenTo("all")}
-              className={`px-3 py-1 text-sm transition-colors ${openTo === "all" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
+              className={`px-3 py-1 text-sm ${openTo === "all" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
               All
             </button>
             <button
               type="button"
               onClick={() => setOpenTo("mentorship")}
-              className={`px-3 py-1 text-sm transition-colors ${openTo === "mentorship" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
+              className={`px-3 py-1 text-sm ${openTo === "mentorship" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
               Mentorship
             </button>
             <button
               type="button"
               onClick={() => setOpenTo("work")}
-              className={`px-3 py-1 text-sm transition-colors ${openTo === "work" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
+              className={`px-3 py-1 text-sm ${openTo === "work" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
             >
               Work
             </button>
@@ -134,7 +134,7 @@ export default function DevsPage() {
             <Link
               key={dev.username}
               href={`/${dev.username}`}
-              className="border-2 border-foreground p-4 transition-colors cursor-pointer group block hover:bg-foreground/[0.03]"
+              className="border-2 border-foreground p-4 cursor-pointer group block hover:bg-foreground/[0.03]"
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="border-2 border-foreground p-2">

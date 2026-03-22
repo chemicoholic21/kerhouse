@@ -42,7 +42,7 @@ export function FindDevelopers() {
         {developers.map((dev) => (
           <div 
             key={dev.username}
-            className="border-2 border-foreground/50 p-4 hover:bg-foreground/5 transition-colors"
+            className="border-2 border-foreground/50 p-4 hover:bg-foreground/5"
           >
             <div className="flex items-start gap-3">
               <div className="text-xl font-mono">{dev.avatar}</div>
@@ -59,10 +59,10 @@ export function FindDevelopers() {
             </div>
             
             <div className="flex gap-2 mt-3">
-              <button className="border-2 border-foreground px-3 py-1 text-sm hover:bg-foreground hover:text-background transition-colors">
+              <button className="border-2 border-foreground px-3 py-1 text-sm hover:bg-foreground hover:text-background">
                 Follow
               </button>
-              <button className="border-2 border-foreground px-3 py-1 text-sm hover:bg-foreground hover:text-background transition-colors">
+              <button className="border-2 border-foreground px-3 py-1 text-sm hover:bg-foreground hover:text-background">
                 Message
               </button>
             </div>
