@@ -17,7 +17,7 @@ export function Hero() {
             a home for human programmers
           </h1>
           <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto lg:mx-0">
-            discover open source, learn new skills, and get hired
+            discover open source projects, learn essential skills, and find meaningful work
           </p>
           <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
             <button className="border-2 border-foreground px-4 py-2 hover:bg-foreground hover:text-background transition-colors">
