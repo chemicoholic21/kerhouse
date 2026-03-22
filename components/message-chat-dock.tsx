@@ -168,13 +168,19 @@ export function MessageChatDock({
                 <button
                   type="button"
                   onClick={() => onOpenPeer(t.peer)}
-                  className="w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground/[0.04] transition-colors"
+                  className="group/inboxrow w-full cursor-pointer text-left py-3 px-3 hover:bg-foreground hover:text-background transition-colors"
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="font-bold text-highlight text-sm">@{t.peer}</span>
-                    <span className="text-xs text-muted-foreground tabular-nums shrink-0">{t.time}</span>
+                    <span className="font-bold text-highlight text-sm group-hover/inboxrow:text-background">
+                      @{t.peer}
+                    </span>
+                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 group-hover/inboxrow:text-background/80">
+                      {t.time}
+                    </span>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{t.preview}</p>
+                  <p className="text-sm text-muted-foreground mt-1 line-clamp-1 group-hover/inboxrow:text-background/80">
+                    {t.preview}
+                  </p>
                 </button>
               </li>
             ))}

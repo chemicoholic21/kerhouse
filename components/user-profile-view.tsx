@@ -47,7 +47,10 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-4">
                   {dev.skills.map((skill) => (
-                    <span key={skill} className="border border-foreground px-1.5 py-0.5 text-xs">
+                    <span
+                      key={skill}
+                      className="border border-foreground px-1.5 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                    >
                       {skill}
                     </span>
                   ))}
@@ -80,7 +83,10 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               <p className="text-xs text-muted-foreground mb-2">Strong in</p>
               <div className="flex flex-wrap gap-1.5 mb-5">
                 {p.skillsStrong.map((s) => (
-                  <span key={s} className="border border-foreground px-2 py-0.5 text-xs">
+                  <span
+                    key={s}
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                  >
                     {s}
                   </span>
                 ))}
@@ -88,7 +94,10 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               <p className="text-xs text-muted-foreground mb-2">Also uses</p>
               <div className="flex flex-wrap gap-1.5">
                 {p.skillsAlso.map((s) => (
-                  <span key={s} className="border border-foreground px-2 py-0.5 text-xs">
+                  <span
+                    key={s}
+                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background transition-colors cursor-default"
+                  >
                     {s}
                   </span>
                 ))}
@@ -106,21 +115,29 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                 return (
                   <div
                     key={`${c.repo}-${c.title}-${i}`}
-                    className="flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground/[0.03] transition-colors"
+                    className="group/contribution flex items-start gap-3 py-[11px] px-4 sm:px-5 hover:bg-foreground hover:text-background transition-colors"
                   >
-                    <div className="border border-foreground p-1.5 shrink-0 mt-0.5">
-                      <Icon className="w-3.5 h-3.5 text-highlight" aria-hidden strokeWidth={2.5} />
+                    <div className="border border-foreground p-1.5 shrink-0 mt-0.5 group-hover/contribution:border-background/40">
+                      <Icon
+                        className="w-3.5 h-3.5 text-highlight group-hover/contribution:text-background"
+                        aria-hidden
+                        strokeWidth={2.5}
+                      />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                        <span className="text-xs font-bold uppercase tracking-wide text-highlight">
+                        <span className="text-xs font-bold uppercase tracking-wide text-highlight group-hover/contribution:text-background">
                           {contributionLabel[c.kind]}
                         </span>
-                        <span className="text-sm font-mono break-all text-muted-foreground">{c.repo}</span>
+                        <span className="text-sm font-mono break-all text-muted-foreground group-hover/contribution:text-background/80">
+                          {c.repo}
+                        </span>
                       </div>
                       <p className="text-sm mt-1 leading-snug">{c.title}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5">{c.time}</span>
+                    <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5 group-hover/contribution:text-background/80">
+                      {c.time}
+                    </span>
                   </div>
                 )
               })}
