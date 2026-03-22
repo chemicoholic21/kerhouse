@@ -486,9 +486,9 @@ export function Terminal() {
 
   if (!isOpen) return null
 
-  /* Mirror chat dock width (360px) on the left: sm:left-4 sm:right-auto */
+  /* Docked terminal: wider / shorter panel than the message dock */
   const dockedFrame =
-    "fixed z-[100] border-2 border-foreground bg-background bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[360px]"
+    "fixed z-[100] border-2 border-foreground bg-background bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[min(480px,calc(100vw-2rem))]"
 
   if (collapsed && !isMaximized) {
     return (
@@ -528,7 +528,7 @@ export function Terminal() {
       className={`fixed z-[100] border-2 border-foreground bg-background ${
         isMaximized
           ? "inset-0 h-dvh w-full flex flex-col"
-          : "bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[360px]"
+          : "bottom-0 left-4 right-0 sm:left-4 sm:right-auto sm:w-[min(480px,calc(100vw-2rem))]"
       }`}
     >
       {/* Title bar — same layout as message dock: title left, icons right */}
@@ -578,7 +578,7 @@ export function Terminal() {
       <div
         ref={contentRef}
         className={`p-3 overflow-y-auto font-mono text-sm ${
-          isMaximized ? "min-h-0 flex-1" : "h-[350px]"
+          isMaximized ? "min-h-0 flex-1" : "h-[220px]"
         }`}
         onClick={() => inputRef.current?.focus()}
       >
