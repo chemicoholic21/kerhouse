@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Home, Palette, TerminalSquare, UserCircle } from "lucide-react"
+import { Home, Inbox, Palette, TerminalSquare, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
 import { useAuth } from "./auth-provider"
@@ -56,6 +56,14 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-3">
+          <Link
+            href="/inbox"
+            className="p-1 hover:text-muted-foreground transition-colors text-foreground"
+            aria-label="Inbox"
+            title="Inbox"
+          >
+            <Inbox className="w-4 h-4" strokeWidth={2} />
+          </Link>
           <button
             onClick={openTerminal}
             className="p-1 hover:text-muted-foreground transition-colors"
