@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Minus, Send, X } from "lucide-react"
+import { ChevronUp, Minus, Send, X } from "lucide-react"
 
 export type ChatBubble = {
   id: string
@@ -10,42 +10,28 @@ export type ChatBubble = {
   time: string
 }
 
-function seedThread(peerUsername: string): ChatBubble[] {
-  return [
-    {
-      id: "s1",
-      from: "peer",
-      text: `Hey — your profile on hackerhou.se caught my eye. Really nice work in the open.`,
-      time: "Tue",
-    },
-    {
-      id: "s2",
-      from: "peer",
-      text: `If you're open to a quick chat about a small tooling idea, let me know.`,
-      time: "Tue",
-    },
-  ]
-}
-
 export function MessageChatDock({
   open,
   onClose,
   peerUsername,
-  selfUsername,
 }: {
   open: boolean
   onClose: () => void
   peerUsername: string
-  selfUsername: string
 }) {
   const [messages, setMessages] = useState<ChatBubble[]>([])
   const [draft, setDraft] = useState("")
+  const [collapsed, setCollapsed] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!open) return
-    setMessages(seedThread(peerUsername))
+    if (!open) {
+      setCollapsed(false)
+      return
+    }
+    setMessages([])
     setDraft("")
+    setCollapsed(false)
   }, [open, peerUsername])
 
   useEffect(() => {
@@ -63,6 +49,37 @@ export function MessageChatDock({
 
   if (!open) return null
 
+  const dockFrame =
+    "fixed z-[100] bottom-0 left-0 right-4 sm:left-auto sm:right-4 sm:w-[360px] border-2 border-foreground bg-background"
+
+  if (collapsed) {
+    return (
+      <div className={`${dockFrame} flex items-center justify-between gap-2 px-3 py-2`} role="dialog" aria-label={`Message ${peerUsername}`}>
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          className="min-w-0 flex-1 text-left text-sm font-bold truncate hover:underline underline-offset-2"
+          aria-expanded="false"
+        >
+          @{peerUsername}
+        </button>
+        <div className="flex items-center gap-0.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setCollapsed(false)}
+            className="p-1 hover:bg-foreground/10"
+            aria-label="Expand"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </button>
+          <button type="button" onClick={onClose} className="p-1 hover:bg-foreground/10" aria-label="Close">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   function send() {
     const t = draft.trim()
     if (!t) return
@@ -77,53 +94,37 @@ export function MessageChatDock({
 
   return (
     <div
-      className="fixed z-[100] bottom-4 right-4 left-4 sm:left-auto flex flex-col w-full sm:w-[380px] max-h-[min(100dvh-2rem,460px)] h-[min(100dvh-2rem,460px)] border-2 border-foreground bg-background shadow-[8px_8px_0_0_var(--foreground)]"
+      className={`${dockFrame} max-h-[min(100dvh,420px)] h-[min(100dvh,420px)] flex flex-col`}
       role="dialog"
       aria-label={`Message ${peerUsername}`}
+      aria-expanded="true"
     >
-      <div className="flex items-center justify-between gap-2 px-3 py-2.5 border-b-2 border-foreground bg-muted/30 shrink-0">
-        <div className="min-w-0">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Messaging</p>
-          <p className="text-sm font-bold truncate text-highlight">@{peerUsername}</p>
-        </div>
+      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b-2 border-foreground shrink-0">
+        <p className="text-sm font-bold truncate min-w-0">@{peerUsername}</p>
         <div className="flex items-center gap-0.5 shrink-0">
           <button
             type="button"
-            onClick={onClose}
-            className="p-1.5 hover:bg-foreground/10 rounded-sm"
-            aria-label="Minimize"
+            onClick={() => setCollapsed(true)}
+            className="p-1 hover:bg-foreground/10"
+            aria-label="Collapse"
           >
             <Minus className="w-4 h-4" />
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 hover:bg-foreground/10 rounded-sm"
-            aria-label="Close"
-          >
+          <button type="button" onClick={onClose} className="p-1 hover:bg-foreground/10" aria-label="Close">
             <X className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <p className="text-[10px] text-muted-foreground px-3 py-1 border-b border-foreground/50 shrink-0">
-        As @{selfUsername} · prototype, not sent anywhere
-      </p>
-
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-3">
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2 text-sm">
         {messages.map((m) => (
-          <div
-            key={m.id}
-            className={`flex ${m.from === "self" ? "justify-end" : "justify-start"}`}
-          >
+          <div key={m.id} className={`flex ${m.from === "self" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-[88%] rounded-sm px-3 py-2 text-sm leading-snug border ${
-                m.from === "self"
-                  ? "border-foreground bg-foreground text-background rounded-br-none"
-                  : "border-foreground/60 bg-muted/40 text-foreground rounded-bl-none"
+              className={`max-w-[90%] border border-foreground px-2 py-1.5 ${
+                m.from === "self" ? "bg-foreground text-background" : "bg-background"
               }`}
             >
-              <p>{m.text}</p>
+              <p className="leading-snug">{m.text}</p>
               <p
                 className={`text-[10px] mt-1 tabular-nums ${
                   m.from === "self" ? "text-background/70" : "text-muted-foreground"
@@ -149,13 +150,13 @@ export function MessageChatDock({
           }}
           rows={2}
           placeholder="Write a message…"
-          className="flex-1 min-h-[44px] max-h-24 border-2 border-foreground bg-background px-2 py-1.5 text-sm resize-none placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-highlight/40"
+          className="flex-1 min-h-[40px] max-h-24 border border-foreground bg-background px-2 py-1.5 text-sm resize-none placeholder:text-muted-foreground focus:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
         />
         <button
           type="button"
           onClick={send}
           disabled={!draft.trim()}
-          className="shrink-0 border-2 border-highlight p-2 text-highlight hover:bg-highlight hover:text-highlight-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none"
+          className="shrink-0 border-2 border-foreground p-2 hover:bg-foreground hover:text-background transition-colors disabled:opacity-40 disabled:pointer-events-none"
           aria-label="Send"
         >
           <Send className="w-4 h-4" />
