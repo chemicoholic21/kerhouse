@@ -112,7 +112,7 @@ export function Header() {
             <>
               <Link
                 href={`/${session.username}`}
-                className="p-1 border-2 border-foreground hover:bg-foreground hover:text-background"
+                className="p-1 cursor-pointer hover:text-muted-foreground text-foreground"
                 aria-label={`Profile (${session.username})`}
                 title={session.username}
               >
