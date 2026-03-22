@@ -68,9 +68,9 @@ export function WeeklyLeaderboard() {
       </div>
 
       <div className="mt-4">
-        <a href="/leaderboard" className="text-sm hover:underline">
+        <Link href="/devs" className="text-sm hover:underline">
           See full leaderboard &gt;
-        </a>
+        </Link>
       </div>
     </section>
   )

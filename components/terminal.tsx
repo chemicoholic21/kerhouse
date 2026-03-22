@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { ChevronUp, Maximize2, Minimize2, Minus, X } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTerminal } from "./terminal-provider"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { repos, developers, roles } from "@/lib/data"
 
 type Directory = "~" | "repos" | "devs" | "roles"
@@ -173,6 +174,7 @@ export function Terminal() {
   const router = useRouter()
   const pathname = usePathname()
   const { isOpen, closeTerminal, openTerminal } = useTerminal()
+  const isMobile = useIsMobile()
   const [mounted, setMounted] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
@@ -507,17 +509,28 @@ export function Terminal() {
 
   if (!isOpen) return null
 
-  /* Docked terminal: wider / shorter panel than the message dock */
+  /* Docked terminal: bottom sheet on md+; narrow centered strip on small screens */
   const dockedFrame =
-    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
+    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm bottom-0 max-md:left-1/2 max-md:right-auto max-md:w-[min(90vw,480px)] max-md:-translate-x-1/2 md:left-5 md:right-auto md:w-[min(480px,calc(100vw-2.5rem))]"
+
+  const mobileBackdrop =
+    isMobile && !isMaximized ? (
+      <div
+        className="fixed inset-0 z-[99] bg-foreground/25 md:hidden"
+        aria-hidden
+        onClick={closeTerminal}
+      />
+    ) : null
 
   if (collapsed && !isMaximized) {
     return (
-      <div
-        ref={terminalRef}
-        className={`${dockedFrame} flex items-center justify-between gap-2 px-3 py-2 select-none`}
-        onDoubleClick={() => setCollapsed(false)}
-      >
+      <>
+        {mobileBackdrop}
+        <div
+          ref={terminalRef}
+          className={`${dockedFrame} flex items-center justify-between gap-2 px-3 py-2 select-none`}
+          onDoubleClick={() => setCollapsed(false)}
+        >
         <button
           type="button"
           onClick={() => setCollapsed(false)}
@@ -540,6 +553,7 @@ export function Terminal() {
           </button>
         </div>
       </div>
+      </>
     )
   }
 
@@ -568,23 +582,25 @@ export function Terminal() {
   }
 
   return (
-    <div
-      ref={terminalRef}
-      className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm flex flex-col ${
-        isMaximized
-          ? "inset-0 h-dvh w-full"
-          : "bottom-0 left-5 right-4 sm:left-5 sm:right-auto sm:w-[min(480px,calc(100vw-2.5rem))]"
-      }`}
-    >
+    <>
+      {mobileBackdrop}
+      <div
+        ref={terminalRef}
+        className={`fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm flex flex-col ${
+          isMaximized
+            ? "inset-0 h-dvh w-full"
+            : "max-md:left-1/2 max-md:top-1/2 max-md:-translate-x-1/2 max-md:-translate-y-1/2 max-md:bottom-auto max-md:right-auto max-md:w-[90vw] max-md:h-[90dvh] max-md:max-h-[90dvh] md:bottom-0 md:left-5 md:right-auto md:top-auto md:translate-x-0 md:translate-y-0 md:w-[min(480px,calc(100vw-2.5rem))]"
+        }`}
+      >
       {/* Inner wrapper: `relative` here — never on the fixed shell (would override `fixed`). */}
       <div
         className={
           isMaximized
             ? "flex min-h-0 min-w-0 flex-1 flex-col"
-            : "relative flex w-full flex-col"
+            : "relative flex w-full flex-col max-md:min-h-0 max-md:flex-1 max-md:flex max-md:flex-col"
         }
       >
-        {!isMaximized ? (
+        {!isMaximized && !isMobile ? (
           <div
             className="absolute top-0 right-0 left-0 z-20 h-3 cursor-ns-resize touch-none"
             onMouseDown={onResizeDragMouseDown}
@@ -640,9 +656,9 @@ export function Terminal() {
         <div
           ref={contentRef}
           className={`p-3 overflow-y-auto font-mono text-sm ${
-            isMaximized ? "min-h-0 flex-1" : "shrink-0"
+            isMaximized || isMobile ? "min-h-0 flex-1" : "shrink-0"
           }`}
-          style={isMaximized ? undefined : { height: dockedContentHeight }}
+          style={isMaximized || isMobile ? undefined : { height: dockedContentHeight }}
           onClick={() => inputRef.current?.focus()}
         >
           {history.map((line, i) => (
@@ -672,5 +688,6 @@ export function Terminal() {
         </div>
       </div>
     </div>
+    </>
   )
 }

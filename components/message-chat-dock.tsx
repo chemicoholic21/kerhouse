@@ -63,17 +63,30 @@ export function MessageChatDock({
 
   if (!open) return null
 
-  const dockFrame =
-    "fixed z-[100] bottom-0 left-2 right-5 sm:left-auto sm:right-5 sm:w-[360px] border-2 border-foreground bg-background/90 backdrop-blur-sm"
+  /** Below md: centered 90×90 modal; md+: bottom-right sheet (matches hooks/use-mobile 768px). */
+  const dockCollapsed =
+    "fixed z-[100] bottom-0 border-2 border-foreground bg-background/90 backdrop-blur-sm flex items-center justify-between gap-2 px-3 py-2 max-md:left-1/2 max-md:right-auto max-md:w-[min(90vw,360px)] max-md:-translate-x-1/2 md:left-auto md:right-5 md:w-[360px]"
+  const dockExpanded =
+    "fixed z-[100] border-2 border-foreground bg-background/90 backdrop-blur-sm flex flex-col max-md:left-1/2 max-md:top-1/2 max-md:-translate-x-1/2 max-md:-translate-y-1/2 max-md:bottom-auto max-md:right-auto max-md:w-[90vw] max-md:h-[90dvh] max-md:max-h-[90dvh] md:bottom-0 md:left-auto md:right-5 md:top-auto md:translate-x-0 md:translate-y-0 md:w-[360px] md:h-[min(100dvh,420px)] md:max-h-[min(100dvh,420px)]"
+
+  const mobileBackdrop = (
+    <div
+      className="fixed inset-0 z-[99] bg-foreground/25 md:hidden"
+      aria-hidden
+      onClick={onClose}
+    />
+  )
 
   const headerTitle = isInbox ? "Inbox" : peerUsername
   const collapsedLabel = isInbox ? "Inbox" : peerUsername
 
   if (collapsed) {
     return (
-      <div
-        className={`${dockFrame} flex items-center justify-between gap-2 px-3 py-2`}
-        role="dialog"
+      <>
+        {mobileBackdrop}
+        <div
+          className={dockCollapsed}
+          role="dialog"
         aria-label={isInbox ? "Inbox" : `Message ${peerUsername}`}
         onDoubleClick={() => setCollapsed(false)}
       >
@@ -102,6 +115,7 @@ export function MessageChatDock({
           </button>
         </div>
       </div>
+      </>
     )
   }
 
@@ -118,9 +132,11 @@ export function MessageChatDock({
   }
 
   return (
-    <div
-      className={`${dockFrame} max-h-[min(100dvh,420px)] h-[min(100dvh,420px)] flex flex-col`}
-      role="dialog"
+    <>
+      {mobileBackdrop}
+      <div
+        className={dockExpanded}
+        role="dialog"
       aria-label={isInbox ? "Inbox" : `Message ${peerUsername}`}
       aria-expanded="true"
     >
@@ -241,5 +257,6 @@ export function MessageChatDock({
         </>
       )}
     </div>
+    </>
   )
 }
