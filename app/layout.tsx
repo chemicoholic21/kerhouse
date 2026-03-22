@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AuthProvider } from '@/components/auth-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TerminalProvider } from '@/components/terminal-provider'
 import { Terminal } from '@/components/terminal'
@@ -48,10 +49,12 @@ export default function RootLayout({
           themes={["light", "dark", "monokai", "dracula", "solarized", "nord"]}
           disableTransitionOnChange
         >
-          <TerminalProvider>
-            {children}
-            <Terminal />
-          </TerminalProvider>
+          <AuthProvider>
+            <TerminalProvider>
+              {children}
+              <Terminal />
+            </TerminalProvider>
+          </AuthProvider>
         </ThemeProvider>
         <Analytics />
       </body>

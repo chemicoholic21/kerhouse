@@ -4,6 +4,7 @@ import { Eye, GitCommit, GitPullRequest, MapPin, MessageSquare, User } from "luc
 import type { Developer } from "@/lib/data"
 import type { ContributionKind } from "@/lib/profile-prototype"
 import { prototypeContributions, prototypeProfile } from "@/lib/profile-prototype"
+import { ProfileMessageButton } from "@/components/profile-message-button"
 
 const contributionIcon: Record<ContributionKind, LucideIcon> = {
   commit: GitCommit,
@@ -51,6 +52,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     </span>
                   ))}
                 </div>
+                <ProfileMessageButton targetUsername={dev.username} />
               </div>
             </div>
           </section>

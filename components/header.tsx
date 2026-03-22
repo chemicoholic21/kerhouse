@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { Home, Palette, TerminalSquare } from "lucide-react"
+import { Home, Palette, TerminalSquare, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
+import { useAuth } from "./auth-provider"
 import { useTerminal } from "./terminal-provider"
 
 const themes = [
@@ -17,6 +18,7 @@ const themes = [
 
 export function Header() {
   const { theme, setTheme } = useTheme()
+  const { session, ready, signIn, signOut } = useAuth()
   const { openTerminal } = useTerminal()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -88,9 +90,34 @@ export function Header() {
               </div>
             )}
           </div>
-          <button className="border-2 border-foreground px-4 py-0.5 font-medium hover:bg-foreground hover:text-background transition-colors">
-            Log In
-          </button>
+          {ready && session ? (
+            <>
+              <Link
+                href={`/${session.username}`}
+                className="p-1 border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
+                aria-label={`Profile (${session.username})`}
+                title={session.username}
+              >
+                <UserCircle className="w-5 h-5" strokeWidth={2} />
+              </Link>
+              <button
+                type="button"
+                onClick={signOut}
+                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background transition-colors"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={signIn}
+              disabled={!ready}
+              className="border-2 border-foreground px-4 py-0.5 font-medium hover:bg-foreground hover:text-background transition-colors disabled:opacity-50"
+            >
+              Sign in
+            </button>
+          )}
         </div>
       </div>
     </header>
