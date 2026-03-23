@@ -19,13 +19,21 @@ export const metadata: Metadata = {
     'Discover open source projects, meet developers, find roles, and more — a home for human programmers.',
   generator: 'v0.app',
   icons: {
+    shortcut: '/favicon.ico',
     icon: [
       {
+        url: '/favicon.ico',
+      },
+      {
         url: '/icon-light-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
         media: '(prefers-color-scheme: light)',
       },
       {
         url: '/icon-dark-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
         media: '(prefers-color-scheme: dark)',
       },
       {
