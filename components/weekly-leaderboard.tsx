@@ -1,15 +1,6 @@
 import Link from "next/link"
 import { TrendingUp, User } from "lucide-react"
-import { developers } from "@/lib/data"
-
-const demoScores = [16881.3, 15241.2, 12787.8, 12340.0, 11324.6] as const
-
-const leaderboardData = developers.slice(0, demoScores.length).map((d, i) => ({
-  rank: i + 1,
-  name: d.name,
-  handle: d.username,
-  score: demoScores[i]!,
-}))
+import { sql } from "@/lib/db"
 
 function formatRank(n: number) {
   return String(n).padStart(2, "0")
@@ -22,7 +13,21 @@ function formatScore(n: number) {
   })
 }
 
-export function WeeklyLeaderboard() {
+export async function WeeklyLeaderboard() {
+  const dbData = await sql`
+    SELECT username, name, total_score 
+    FROM leaderboard 
+    ORDER BY total_score DESC 
+    LIMIT 5
+  `
+
+  const leaderboardData = dbData.map((row: any, i: number) => ({
+    rank: i + 1,
+    name: row.name || row.username,
+    handle: row.username,
+    score: row.total_score || 0,
+  }))
+
   return (
     <section className="border-2 border-dashed border-foreground/70 p-6">
       <div className="flex items-center justify-between mb-4">

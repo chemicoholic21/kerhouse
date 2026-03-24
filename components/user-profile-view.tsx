@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react"
 import { Eye, GitCommit, GitPullRequest, MapPin, MessageSquare, User } from "lucide-react"
 import type { Developer } from "@/lib/data"
 import type { ContributionKind } from "@/lib/profile-prototype"
-import { prototypeContributions, prototypeProfile } from "@/lib/profile-prototype"
+import { prototypeContributions } from "@/lib/profile-prototype"
 import { ProfileMessageSidebar } from "@/components/profile-message-button"
 
 const contributionIcon: Record<ContributionKind, LucideIcon> = {
@@ -34,9 +34,25 @@ function contributionHref(repo: string) {
   return `https://github.com/${repo}`
 }
 
-export function UserProfileView({ dev }: { dev: Developer }) {
-  const p = prototypeProfile
+interface UserProfileViewProps {
+  dev: Developer
+  bio?: string
+  weeklyRank?: number
+  weeklyScore?: number
+  skillsStrong?: string[]
+  skillsAlso?: string[]
+  contributions?: any[]
+}
 
+export function UserProfileView({ 
+  dev, 
+  bio, 
+  weeklyRank, 
+  weeklyScore, 
+  skillsStrong = [], 
+  skillsAlso = [],
+  contributions = [...prototypeContributions]
+}: UserProfileViewProps) {
   return (
     <>
       <main className="layout-container py-8">
@@ -52,7 +68,7 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-lg sm:text-xl text-highlight">{dev.name}</div>
                 <div className="text-sm text-muted-foreground">{dev.username}</div>
-                <p className="text-sm mt-3 leading-relaxed max-w-prose">{p.bio}</p>
+                {bio && <p className="text-sm mt-3 leading-relaxed max-w-prose">{bio}</p>}
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden />
@@ -83,43 +99,51 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                 Impact this week
               </h2>
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-3xl font-bold tabular-nums">#{p.weeklyRank}</span>
+                <span className="text-3xl font-bold tabular-nums">#{weeklyRank || "?"}</span>
                 <span className="text-muted-foreground text-sm">on the leaderboard</span>
               </div>
               <p className="text-sm tabular-nums mt-2">
-                {p.weeklyScore.toLocaleString("en-US", { maximumFractionDigits: 1 })} impact score
+                {(weeklyScore || 0).toLocaleString("en-US", { maximumFractionDigits: 1 })} impact score
               </p>
               <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-                Synthetic demo — same spirit as the home leaderboard.
+                Ranked by total impact score across all active projects.
               </p>
             </section>
 
             <section className="border-2 border-dashed border-foreground/70 p-5">
               <h2 className="text-sm font-bold uppercase tracking-wide text-highlight mb-4">Skills</h2>
-              <p className="text-xs text-muted-foreground mb-2">Strong in</p>
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {p.skillsStrong.map((s) => (
-                  <Link
-                    key={s}
-                    href={reposTagHref(s)}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
-                  >
-                    {s}
-                  </Link>
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground mb-2">Also uses</p>
-              <div className="flex flex-wrap gap-1.5">
-                {p.skillsAlso.map((s) => (
-                  <Link
-                    key={s}
-                    href={reposTagHref(s)}
-                    className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
-                  >
-                    {s}
-                  </Link>
-                ))}
-              </div>
+              {skillsStrong.length > 0 && (
+                <>
+                  <p className="text-xs text-muted-foreground mb-2">Strong in</p>
+                  <div className="flex flex-wrap gap-1.5 mb-5">
+                    {skillsStrong.map((s) => (
+                      <Link
+                        key={s}
+                        href={reposTagHref(s)}
+                        className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
+                      >
+                        {s}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+              {skillsAlso.length > 0 && (
+                <>
+                  <p className="text-xs text-muted-foreground mb-2">Also uses</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {skillsAlso.map((s) => (
+                      <Link
+                        key={s}
+                        href={reposTagHref(s)}
+                        className="border border-foreground px-2 py-0.5 text-xs hover:bg-foreground hover:text-background cursor-pointer"
+                      >
+                        {s}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
             </section>
           </aside>
 
@@ -128,11 +152,11 @@ export function UserProfileView({ dev }: { dev: Developer }) {
               Contributions
             </h2>
             <div className="divide-y divide-foreground">
-              {prototypeContributions.map((c, i) => {
-                const Icon = contributionIcon[c.kind]
+              {contributions.map((c, i) => {
+                const Icon = contributionIcon[c.kind] || GitCommit
                 return (
                   <Link
-                    key={`${c.repo}-${c.title}-${i}`}
+                    key={`${c.repo}-${c.title || i}-${i}`}
                     href={contributionHref(c.repo)}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -148,16 +172,16 @@ export function UserProfileView({ dev }: { dev: Developer }) {
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                         <span className="text-xs font-bold uppercase tracking-wide text-highlight">
-                          {contributionLabel[c.kind]}
+                          {contributionLabel[c.kind] || "Repo"}
                         </span>
                         <span className="text-sm font-mono break-all text-muted-foreground">
                           {c.repo}
                         </span>
                       </div>
-                      <p className="text-sm mt-1 leading-snug">{c.title}</p>
+                      <p className="text-sm mt-1 leading-snug">{c.title || "Latest activity"}</p>
                     </div>
                     <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5">
-                      {c.time}
+                      {c.time || "Recent"}
                     </span>
                   </Link>
                 )
