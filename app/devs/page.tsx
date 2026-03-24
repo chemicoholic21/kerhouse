@@ -1,233 +1,156 @@
-"use client"
-
-import { useState, useRef, useEffect } from "react"
-import Link from "next/link"
 import { Header } from "@/components/header"
-import { User, ChevronDown, TrendingUp } from "lucide-react"
-import type { Developer } from "@/lib/data"
-import { developers, languages, countries, skillsList } from "@/lib/data"
+import { sql } from "@/lib/db"
+import { DevsList, type DevRow } from "@/components/devs-list"
+import { languages, countries, skillsList } from "@/lib/data"
+import { unstable_cache } from "next/cache"
 
-/** Same top-five values as `weekly-leaderboard` for consistency */
-const DEMO_IMPACT_TOP = [16881.3, 15241.2, 12787.8, 12340.0, 11324.6] as const
+const ITEMS_PER_PAGE = 50
 
-function impactScore(dev: Developer): number {
-  const i = developers.findIndex((d) => d.username === dev.username)
-  if (i >= 0 && i < DEMO_IMPACT_TOP.length) return DEMO_IMPACT_TOP[i]!
-  const h = dev.username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
-  return Math.round((6200 + (h % 4200) + dev.repos * 2.8 + dev.followers * 0.11) * 10) / 10
-}
+async function getDevs(
+  page: number, 
+  filters: { skill?: string; language?: string; country?: string; openTo?: string }
+) {
+  const offset = (page - 1) * ITEMS_PER_PAGE
+  
+  // Base conditions
+  const conditions: string[] = []
+  const params: any[] = []
 
-function devTopics(dev: Developer): string[] {
-  const seen = new Set<string>()
-  const out: string[] = []
-  const push = (t: string) => {
-    if (seen.has(t)) return
-    seen.add(t)
-    out.push(t)
+  // Note: We use string matching for JSON fields as a simple optimization 
+  // without knowing the exact DB schema extensions (GIN indexes, etc).
+  if (filters.skill && filters.skill !== 'all') {
+    conditions.push(`l.unique_skills_json::text ILIKE $${params.length + 1}`)
+    params.push(`%${filters.skill}%`)
   }
-  push(dev.language)
-  for (const s of dev.skills) push(s)
-  return out
-}
 
-function formatRank(n: number) {
-  return String(n).padStart(2, "0")
-}
+  if (filters.language && filters.language !== 'all') {
+    conditions.push(`a.languages_json::text ILIKE $${params.length + 1}`)
+    params.push(`%${filters.language}%`)
+  }
 
-function formatScore(n: number) {
-  return n.toLocaleString("en-US", {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  })
-}
+  if (filters.country && filters.country !== 'all') {
+    conditions.push(`l.location ILIKE $${params.length + 1}`)
+    params.push(`%${filters.country}%`)
+  }
 
-function Dropdown({ 
-  label, 
-  value, 
-  options, 
-  onChange 
-}: { 
-  label: string
-  value: string
-  options: { value: string; label: string }[]
-  onChange: (value: string) => void 
-}) {
-  const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  // "openTo" logic could be added here if the DB supports it. 
+  // For now we ignore it or implement a placeholder if field exists.
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setIsOpen(false)
+  const whereClause = conditions.length > 0 
+    ? 'WHERE ' + conditions.join(' AND ') 
+    : ''
+
+  // Execute Count and Data queries in parallel
+  const [countResult, dbData] = await Promise.all([
+    sql.query(
+      `
+      SELECT COUNT(*) as count
+      FROM leaderboard l
+      LEFT JOIN analyses a ON l.username = a.username
+      ${whereClause}
+      `,
+      params
+    ),
+    sql.query(
+      `
+      SELECT 
+        l.name, 
+        l.username, 
+        l.location as country, 
+        l.total_score as score,
+        l.unique_skills_json,
+        a.languages_json
+      FROM leaderboard l
+      LEFT JOIN analyses a ON l.username = a.username
+      ${whereClause}
+      ORDER BY l.total_score DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `,
+      params
+    )
+  ])
+
+  const totalItems = Number(countResult[0].count)
+
+  // Process only the fetched page
+  const devs: DevRow[] = dbData.map((row: any) => {
+    let skills: string[] = []
+    try {
+      if (row.unique_skills_json) {
+        skills = JSON.parse(row.unique_skills_json)
       }
+    } catch (e) {
+      console.error("Failed to parse skills for", row.username)
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
 
-  const selectedLabel = options.find(o => o.value === value)?.label || label
+    let language = "Unknown"
+    try {
+      if (row.languages_json) {
+        const langs = JSON.parse(row.languages_json)
+        if (Array.isArray(langs) && langs.length > 0) {
+          language = langs[0]
+        } else if (typeof langs === 'object') {
+          language = Object.keys(langs)[0] || "Unknown"
+        }
+      }
+    } catch (e) {
+      console.error("Failed to parse languages for", row.username)
+    }
 
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="border-2 border-foreground px-3 py-1 text-sm flex items-center gap-2 hover:bg-foreground hover:text-background"
-      >
-        <span>{label}: {selectedLabel}</span>
-        <ChevronDown className={`w-3 h-3 ${isOpen ? "rotate-180" : ""}`} />
-      </button>
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-1 border-2 border-foreground bg-background z-50 min-w-full max-h-48 overflow-y-auto">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => {
-                onChange(option.value)
-                setIsOpen(false)
-              }}
-              className={`w-full text-left px-3 py-1.5 text-sm hover:bg-foreground hover:text-background ${
-                value === option.value ? "bg-foreground/10" : ""
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
+    return {
+      name: row.name || row.username,
+      username: row.username,
+      country: row.country || "Unknown",
+      score: row.score || 0,
+      skills: skills,
+      language: language,
+    }
+  })
+
+  return {
+    devs,
+    totalItems,
+    totalPages: Math.ceil(totalItems / ITEMS_PER_PAGE)
+  }
 }
 
-export default function DevsPage() {
-  const [openTo, setOpenTo] = useState<"all" | "mentorship" | "work">("all")
-  const [selectedSkill, setSelectedSkill] = useState("all")
-  const [selectedLanguage, setSelectedLanguage] = useState("all")
-  const [selectedCountry, setSelectedCountry] = useState("all")
+// Wrap in cache
+const getCachedDevs = unstable_cache(
+  async (page, filters) => getDevs(page, filters),
+  ['devs-list-v1'], 
+  { revalidate: 60, tags: ['devs'] }
+)
 
-  const filteredDevs = developers
-    .filter((dev) => {
-      const skillMatch = selectedSkill === "all" || dev.skills.includes(selectedSkill)
-      const languageMatch = selectedLanguage === "all" || dev.language === selectedLanguage
-      const countryMatch = selectedCountry === "all" || dev.country === selectedCountry
-      return skillMatch && languageMatch && countryMatch
-    })
-    .sort((a, b) => impactScore(b) - impactScore(a))
+export default async function DevsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const resolvedParams = await searchParams
+  const page = Number(resolvedParams.page) || 1
+  const skill = typeof resolvedParams.skill === 'string' ? resolvedParams.skill : undefined
+  const language = typeof resolvedParams.language === 'string' ? resolvedParams.language : undefined
+  const country = typeof resolvedParams.country === 'string' ? resolvedParams.country : undefined
+  const openTo = typeof resolvedParams.openTo === 'string' ? resolvedParams.openTo : undefined
+
+  const { devs, totalItems, totalPages } = await getCachedDevs(page, { skill, language, country, openTo })
 
   return (
     <div className="min-h-screen">
       <Header />
       
       <main className="layout-container py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-highlight">Find Developers</h2>
-          <div className="flex border-2 border-foreground">
-            <button
-              type="button"
-              onClick={() => setOpenTo("all")}
-              className={`px-3 py-1 text-sm ${openTo === "all" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
-            >
-              All
-            </button>
-            <button
-              type="button"
-              onClick={() => setOpenTo("mentorship")}
-              className={`px-3 py-1 text-sm ${openTo === "mentorship" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
-            >
-              Mentorship
-            </button>
-            <button
-              type="button"
-              onClick={() => setOpenTo("work")}
-              className={`px-3 py-1 text-sm ${openTo === "work" ? "bg-foreground text-background" : "hover:bg-foreground/10"}`}
-            >
-              Work
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Dropdown
-            label="Skill"
-            value={selectedSkill}
-            options={skillsList}
-            onChange={setSelectedSkill}
-          />
-          <Dropdown
-            label="Language"
-            value={selectedLanguage}
-            options={languages}
-            onChange={setSelectedLanguage}
-          />
-          <Dropdown
-            label="Country"
-            value={selectedCountry}
-            options={countries}
-            onChange={setSelectedCountry}
-          />
-        </div>
-        
-        {filteredDevs.length > 0 ? (
-          <section className="border-2 border-dashed border-foreground/70 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold flex items-center gap-2 text-highlight">
-                <TrendingUp className="w-5 h-5 shrink-0" strokeWidth={2.5} />
-                Developers
-              </h3>
-              <span className="text-sm text-muted-foreground tabular-nums">
-                {filteredDevs.length} shown
-              </span>
-            </div>
-
-            <div className="overflow-x-auto -mx-1 px-1">
-              {/* Fixed score column width so header + rows share identical tracks (auto width was shifting 1fr columns). */}
-              <div className="border-y border-foreground min-w-[min(100%,40rem)] grid grid-cols-[2.5rem_minmax(0,1fr)_minmax(0,6.75rem)_minmax(0,5.5rem)_minmax(0,1fr)_7rem] gap-x-3">
-                <div className="col-span-full grid grid-cols-subgrid gap-x-3 items-center py-[9px] px-2 text-xs font-bold uppercase tracking-wide text-muted-foreground border-b border-foreground">
-                  <span className="text-right tabular-nums">#</span>
-                  <span className="min-w-0 text-left">Name</span>
-                  <span className="min-w-0 truncate text-left">Handle</span>
-                  <span className="min-w-0 truncate text-left">Location</span>
-                  <span className="min-w-0 truncate text-left">Topics</span>
-                  <span className="text-right tabular-nums whitespace-nowrap">Score</span>
-                </div>
-                {filteredDevs.map((dev, index) => (
-                  <Link
-                    key={dev.username}
-                    href={`/${dev.username}`}
-                    className="col-span-full grid grid-cols-subgrid gap-x-3 items-center border-b border-foreground py-[11px] px-2 last:border-b-0 hover:bg-foreground hover:text-background cursor-pointer group/link"
-                  >
-                    <span className="text-right text-sm tabular-nums">
-                      {formatRank(index + 1)}
-                    </span>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <User className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-                      <span className="truncate text-sm font-medium group-hover/link:underline min-w-0">
-                        {dev.name}
-                      </span>
-                    </div>
-                    <span className="text-sm font-mono truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                      {dev.username}
-                    </span>
-                    <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                      {dev.country}
-                    </span>
-                    <span className="text-sm truncate min-w-0 text-muted-foreground group-hover/link:text-background/80">
-                      {devTopics(dev).join(" · ")}
-                    </span>
-                    <span className="text-sm text-right tabular-nums whitespace-nowrap">
-                      {formatScore(impactScore(dev))}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        {filteredDevs.length === 0 && (
-          <div className="border-2 border-dashed border-foreground/50 p-8 text-center">
-            <p>No developers match the selected filters.</p>
-          </div>
-        )}
+        <DevsList 
+          initialDevs={devs} 
+          skillsList={skillsList}
+          languages={languages}
+          countries={countries}
+          pagination={{
+            currentPage: page,
+            totalPages,
+            totalItems
+          }}
+        />
       </main>
       
       <footer className="border-t-2 border-dashed border-foreground/70 py-6">
