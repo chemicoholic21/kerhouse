@@ -45,3 +45,7 @@ coverage/
 .DS_Store
 *.pem
 Thumbs.db
+
+# crawler
+email-discover.ts
+scripts/email_discover_v2.py
