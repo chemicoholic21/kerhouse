@@ -6,6 +6,8 @@ import { MessageDockProvider } from '@/components/message-dock-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TerminalProvider } from '@/components/terminal-provider'
 import { Terminal } from '@/components/terminal'
+import { buildPageMetadata } from '@/lib/seo'
+import { OrganizationSchema } from '@/components/schema/OrganizationSchema'
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -14,35 +16,28 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'hackerhou.se | a home for human programmers',
-  description:
-    'Discover open source projects, meet developers, find roles, and more — a home for human programmers.',
-  generator: 'v0.app',
-  icons: {
-    shortcut: '/favicon.ico',
-    icon: [
-      {
-        url: '/favicon.ico',
-      },
-      {
-        url: '/icon-light-32x32.png',
-        sizes: '32x32',
-        type: 'image/png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        sizes: '32x32',
-        type: 'image/png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+  ...buildPageMetadata({
+    title: "A Home for Human Programmers",
+    description: "Discover open source projects, meet developers, find roles, and more — a home for human programmers.",
+    keywords: ["kerhouse", "hacker house", "open source", "developers", "coding community"],
+  }),
+  metadataBase: new URL("https://hackerhou.se"),
+  title: {
+    default: "Kerhouse — A Home for Human Programmers",
+    template: "%s | Kerhouse",
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 }
 
 export default function RootLayout({
@@ -63,6 +58,7 @@ export default function RootLayout({
           <AuthProvider>
             <MessageDockProvider>
               <TerminalProvider>
+                <OrganizationSchema />
                 {children}
                 <Terminal />
               </TerminalProvider>

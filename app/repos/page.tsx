@@ -1,5 +1,14 @@
 import { Header } from "@/components/header"
 import { TrendingRepos } from "@/components/trending-repos"
+import { buildPageMetadata } from "@/lib/seo"
+
+export const metadata = buildPageMetadata({
+  title: "Repositories",
+  description: "Discover trending open source repositories and projects.",
+  path: "/repos",
+})
+
+export const revalidate = false
 
 export default function ReposPage() {
   return (

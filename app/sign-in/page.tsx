@@ -1,22 +1,14 @@
-"use client"
+import { SignInView } from "@/components/sign-in-view"
+import { buildPageMetadata } from "@/lib/seo"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth-provider"
+export const metadata = buildPageMetadata({
+  title: "Sign In",
+  description: "Sign in to Kerhouse to join the community.",
+  path: "/sign-in",
+})
+
+export const revalidate = false
 
 export default function SignInPage() {
-  const { signIn, ready } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!ready) return
-    signIn()
-    router.replace("/")
-  }, [ready, signIn, router])
-
-  return (
-    <p className="layout-container py-8 text-sm text-muted-foreground">
-      Signing in…
-    </p>
-  )
+  return <SignInView />
 }

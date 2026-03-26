@@ -3,6 +3,13 @@ import { sql } from "@/lib/db"
 import { DevsList, type DevRow } from "@/components/devs-list"
 import { languages, countries, skillsList } from "@/lib/data"
 import { unstable_cache } from "next/cache"
+import { buildPageMetadata } from "@/lib/seo"
+
+export const metadata = buildPageMetadata({
+  title: "Developers",
+  description: "Meet the developers building the future of open source.",
+  path: "/devs",
+})
 
 const ITEMS_PER_PAGE = 50
 

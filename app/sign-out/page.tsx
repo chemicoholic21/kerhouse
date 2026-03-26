@@ -1,22 +1,14 @@
-"use client"
+import { SignOutView } from "@/components/sign-out-view"
+import { buildPageMetadata } from "@/lib/seo"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth-provider"
+export const metadata = buildPageMetadata({
+  title: "Sign Out",
+  description: "Sign out of Kerhouse.",
+  path: "/sign-out",
+})
+
+export const revalidate = false
 
 export default function SignOutPage() {
-  const { signOut, ready } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!ready) return
-    signOut()
-    router.replace("/")
-  }, [ready, signOut, router])
-
-  return (
-    <p className="layout-container py-8 text-sm text-muted-foreground">
-      Signing out…
-    </p>
-  )
+  return <SignOutView />
 }

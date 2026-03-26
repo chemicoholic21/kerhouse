@@ -4,6 +4,15 @@ import { Hero } from "@/components/hero"
 import { WeeklyLeaderboard } from "@/components/weekly-leaderboard"
 import { ExploreProjects } from "@/components/explore-projects"
 import { Skeleton } from "@/components/ui/skeleton"
+import { buildPageMetadata } from "@/lib/seo"
+
+export const metadata = buildPageMetadata({
+  title: "A Home for Human Programmers",
+  description: "Discover open source projects, meet developers, find roles, and more — a home for human programmers.",
+  path: "/",
+})
+
+export const revalidate = false
 
 function LeaderboardSkeleton() {
   return (

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { Header } from "@/components/header"
 import { UserProfileView } from "@/components/user-profile-view"
 import { sql } from "@/lib/db"
+import { buildPageMetadata } from "@/lib/seo"
 
 export async function generateMetadata({
   params,
@@ -16,10 +17,13 @@ export async function generateMetadata({
     SELECT name, username FROM leaderboard WHERE username = ${username}
   `
   
-  if (!dev) return { title: "Profile" }
-  return {
-    title: `${dev.name || dev.username} | hackerhou.se`,
-  }
+  if (!dev) return buildPageMetadata({ title: "Profile", path: `/${username}` })
+  
+  return buildPageMetadata({
+    title: `${dev.name || dev.username}`,
+    description: `View ${dev.name || dev.username}'s profile on Kerhouse.`,
+    path: `/${username}`,
+  })
 }
 
 export default async function UserProfilePage({
