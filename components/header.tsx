@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Home, Inbox, Palette, TerminalSquare, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
-import { useAuth } from "./auth-provider"
+import { useSession, signOut as nextSignOut } from "next-auth/react"
 import { useMessageDock } from "./message-dock-provider"
 import { useTerminal } from "./terminal-provider"
 
@@ -20,12 +20,15 @@ const themes = [
 
 export function Header() {
   const { theme, setTheme } = useTheme()
-  const { session, ready, signIn } = useAuth()
+  const { data: session, status } = useSession()
   const { openTerminal } = useTerminal()
   const { openInbox } = useMessageDock()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  const ready = status !== "loading"
+  const user = session?.user
 
   useEffect(() => {
     setMounted(true)
@@ -72,10 +75,10 @@ export function Header() {
           <button
             type="button"
             disabled={!ready}
-            onClick={() => (session ? openInbox() : signIn())}
+            onClick={() => (user ? openInbox() : undefined)}
             className="p-1 cursor-pointer hover:text-muted-foreground text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label={session ? "Inbox" : "Sign in to open inbox"}
-            title={session ? "Inbox" : "Sign in"}
+            aria-label={user ? "Inbox" : "Sign in to open inbox"}
+            title={user ? "Inbox" : "Sign in"}
           >
             <Inbox className="w-4 h-4" strokeWidth={2} />
           </button>
@@ -107,22 +110,24 @@ export function Header() {
               </div>
             )}
           </div>
-          {ready && session ? (
+          {ready && user ? (
             <>
-              <Link
-                href={`/${session.username}`}
-                className="p-1 cursor-pointer hover:text-muted-foreground text-foreground"
-                aria-label={`Profile (${session.username})`}
-                title={session.username}
+              <div
+                className="p-1 cursor-pointer hover:text-muted-foreground text-foreground flex items-center gap-2"
+                title={user.name || user.email || "User"}
               >
-                <UserCircle className="w-5 h-5" strokeWidth={2} />
-              </Link>
-              <Link
-                href="/sign-out"
-                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background inline-flex items-center justify-center"
+                {user.image ? (
+                  <img src={user.image} alt="" className="w-5 h-5 border border-foreground" />
+                ) : (
+                  <UserCircle className="w-5 h-5" strokeWidth={2} />
+                )}
+              </div>
+              <button
+                onClick={() => nextSignOut()}
+                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background inline-flex items-center justify-center cursor-pointer"
               >
                 Sign out
-              </Link>
+              </button>
             </>
           ) : (
             <Link

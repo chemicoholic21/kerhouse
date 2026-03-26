@@ -1,4 +1,4 @@
-import { SignInView } from "@/components/sign-in-view"
+import { SignInForm } from "@/components/auth-signin-form"
 import { buildPageMetadata } from "@/lib/seo"
 
 export const metadata = buildPageMetadata({
@@ -10,5 +10,9 @@ export const metadata = buildPageMetadata({
 export const revalidate = false
 
 export default function SignInPage() {
-  return <SignInView />
+  return (
+    <div className="min-h-[calc(100-200px)] flex items-center justify-center py-12">
+      <SignInForm />
+    </div>
+  )
 }
