@@ -8,6 +8,7 @@ import { TerminalProvider } from '@/components/terminal-provider'
 import { Terminal } from '@/components/terminal'
 import { buildPageMetadata } from '@/lib/seo'
 import { OrganizationSchema } from '@/components/schema/OrganizationSchema'
+import { SessionProvider } from "next-auth/react"
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -48,23 +49,25 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${jetbrainsMono.variable} font-mono antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="auto"
-          themes={["auto", "light", "dark", "monokai", "dracula", "solarized", "nord"]}
-          disableTransitionOnChange
-          enableSystem={false}
-        >
-          <AuthProvider>
-            <MessageDockProvider>
-              <TerminalProvider>
-                <OrganizationSchema />
-                {children}
-                <Terminal />
-              </TerminalProvider>
-            </MessageDockProvider>
-          </AuthProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="auto"
+            themes={["auto", "light", "dark", "monokai", "dracula", "solarized", "nord"]}
+            disableTransitionOnChange
+            enableSystem={false}
+          >
+            <AuthProvider>
+              <MessageDockProvider>
+                <TerminalProvider>
+                  <OrganizationSchema />
+                  {children}
+                  <Terminal />
+                </TerminalProvider>
+              </MessageDockProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </SessionProvider>
         <Analytics />
       </body>
     </html>
