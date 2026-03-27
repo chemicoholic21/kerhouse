@@ -9,6 +9,7 @@ import { Terminal } from '@/components/terminal'
 import { buildPageMetadata } from '@/lib/seo'
 import { OrganizationSchema } from '@/components/schema/OrganizationSchema'
 import { SessionProvider } from "next-auth/react"
+import { Toaster } from "@/components/ui/toaster"
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -63,6 +64,7 @@ export default function RootLayout({
                   <OrganizationSchema />
                   {children}
                   <Terminal />
+                  <Toaster /> {/* Added Toaster here */}
                 </TerminalProvider>
               </MessageDockProvider>
             </AuthProvider>

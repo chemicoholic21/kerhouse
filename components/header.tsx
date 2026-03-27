@@ -7,6 +7,13 @@ import { useEffect, useState, useRef } from "react"
 import { useSession, signOut as nextSignOut } from "next-auth/react"
 import { useMessageDock } from "./message-dock-provider"
 import { useTerminal } from "./terminal-provider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
 
 const themes = [
   { id: "auto", name: "Auto" },
@@ -111,24 +118,28 @@ export function Header() {
             )}
           </div>
           {ready && user ? (
-            <>
-              <div
-                className="p-1 cursor-pointer hover:text-muted-foreground text-foreground flex items-center gap-2"
-                title={user.name || user.email || "User"}
-              >
-                {user.image ? (
-                  <img src={user.image} alt="" className="w-5 h-5 border border-foreground" />
-                ) : (
-                  <UserCircle className="w-5 h-5" strokeWidth={2} />
-                )}
-              </div>
-              <button
-                onClick={() => nextSignOut()}
-                className="border-2 border-foreground px-3 py-0.5 text-sm font-medium hover:bg-foreground hover:text-background inline-flex items-center justify-center cursor-pointer"
-              >
-                Sign out
-              </button>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div
+                  className="p-1 cursor-pointer hover:text-muted-foreground text-foreground flex items-center gap-2"
+                  title={user.name || user.email || "User"}
+                >
+                  {user.image ? (
+                    <img src={user.image} alt="" className="w-5 h-5 border border-foreground" />
+                  ) : (
+                    <UserCircle className="w-5 h-5" strokeWidth={2} />
+                  )}
+                  {user.name}
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/profile/edit-github">Edit GitHub Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => nextSignOut()}>Sign out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Link
               href="/sign-in"
