@@ -257,7 +257,8 @@ export function Terminal() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return
-      if (e.key.length !== 1 || !/^[a-zA-Z]$/.test(e.key)) return
+      // Allow alphanumeric and common terminal symbols
+      if (e.key.length !== 1 || !/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]$/.test(e.key)) return
 
       const target = e.target
       const inputEl = inputRef.current
@@ -265,7 +266,7 @@ export function Terminal() {
 
       if (target instanceof Element) {
         const field = target.closest("input, textarea, [contenteditable='true']")
-        if (field !== null && field !== inputEl) return
+        if (field !== null) return
       }
 
       if (isOpenRef.current && document.activeElement === inputEl) {

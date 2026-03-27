@@ -153,7 +153,8 @@ export function UserProfileView({
             </h2>
             <div className="divide-y divide-foreground">
               {contributions.map((c, i) => {
-                const Icon = contributionIcon[c.kind] || GitCommit
+                const kind = c.kind as ContributionKind
+                const Icon = contributionIcon[kind] || GitCommit
                 return (
                   <Link
                     key={`${c.repo}-${c.title || i}-${i}`}
@@ -172,7 +173,7 @@ export function UserProfileView({
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                         <span className="text-xs font-bold uppercase tracking-wide text-highlight">
-                          {contributionLabel[c.kind] || "Repo"}
+                          {contributionLabel[kind] || "Repo"}
                         </span>
                         <span className="text-sm font-mono break-all text-muted-foreground">
                           {c.repo}
