@@ -2,17 +2,20 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/auth-provider';
+import { useSession, signIn as nextSignIn } from 'next-auth/react';
 
 export function SignInView() {
-  const { signIn, ready } = useAuth();
+  const { status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!ready) return;
-    signIn();
-    router.replace('/');
-  }, [ready, signIn, router]);
+    if (status === 'loading') return;
+    if (status === 'authenticated') {
+      router.replace('/');
+    } else {
+      nextSignIn('github');
+    }
+  }, [status, router]);
 
   return <p className="layout-container py-8 text-sm text-muted-foreground">Signing in…</p>;
 }

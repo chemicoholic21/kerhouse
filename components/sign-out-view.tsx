@@ -2,17 +2,20 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/auth-provider';
+import { useSession, signOut as nextSignOut } from 'next-auth/react';
 
 export function SignOutView() {
-  const { signOut, ready } = useAuth();
+  const { status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!ready) return;
-    signOut();
-    router.replace('/');
-  }, [ready, signOut, router]);
+    if (status === 'loading') return;
+    if (status === 'authenticated') {
+      nextSignOut({ callbackUrl: '/' });
+    } else {
+      router.replace('/');
+    }
+  }, [status, router]);
 
   return <p className="layout-container py-8 text-sm text-muted-foreground">Signing out…</p>;
 }
