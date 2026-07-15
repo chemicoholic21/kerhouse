@@ -10,6 +10,10 @@ A platform that unites developers by analyzing actual GitHub activity to build p
 
 ```env
 # Database
+# Uses postgres.js against Supabase. On Vercel (serverless / IPv4-only) you MUST
+# use the Supabase transaction pooler (port 6543), not the direct db.<ref>.supabase.co
+# host (which is IPv6-only and unreachable from Vercel):
+#   postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres
 DATABASE_URL="postgresql://..."
 
 # GitHub OAuth (create at [github.com/settings/developers](https://github.com/settings/developers))
