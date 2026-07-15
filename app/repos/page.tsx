@@ -2,7 +2,7 @@ import { Header } from '@/components/header';
 import { TrendingRepos } from '@/components/trending-repos';
 import { buildPageMetadata } from '@/lib/seo';
 import type { TrendingRepo } from '@/app/api/github/repos/route';
-import { neon } from '@neondatabase/serverless';
+import { sql } from '@/lib/db';
 
 export const metadata = buildPageMetadata({
   title: 'Repositories',
@@ -13,8 +13,6 @@ export const metadata = buildPageMetadata({
 export const dynamic = 'force-dynamic';
 
 async function getInitialRepos(): Promise<{ repos: TrendingRepo[]; total: number }> {
-  const sql = neon(process.env.DATABASE_URL!);
-
   const countResult = await sql`SELECT count(*) FROM repo_health WHERE gated_reason IS NULL`;
   const total = parseInt(countResult[0].count, 10);
 

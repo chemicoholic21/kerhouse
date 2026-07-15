@@ -1,11 +1,11 @@
-import { neon } from '@neondatabase/serverless';
+import postgres from 'postgres';
 
 const DATABASE_URL = process.env.DATABASE_URL;
 if (!DATABASE_URL) {
   console.error('DATABASE_URL environment variable is not set');
   process.exit(1);
 }
-const sql = neon(DATABASE_URL);
+const sql = postgres(DATABASE_URL, { prepare: false });
 
 function resolve(r, username) {
   const ownerLogin = r.ownerLogin || r.owner;
@@ -65,3 +65,5 @@ console.log('\n--- distinct key shapes (count => keys) ---');
 for (const [k, c] of [...keySets.entries()].sort((a, b) => b[1] - a[1])) console.log(c, '=>', k);
 console.log('\n--- bad examples ---');
 console.log(JSON.stringify(badExamples, null, 2));
+
+await sql.end();

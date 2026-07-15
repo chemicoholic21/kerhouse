@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       user_count: number;
     }
 
-    const topics = (results as TopicResult[]).map((r) => ({
+    const topics = (results as unknown as TopicResult[]).map((r) => ({
       value: r.topic,
       label: r.label,
       source: r.source,

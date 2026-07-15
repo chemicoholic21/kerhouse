@@ -63,7 +63,7 @@ async function getSkillsList(): Promise<SkillOption[]> {
         ELSE 6
       END,
       COUNT(uss.username) DESC
-  `) as SkillRow[];
+  `) as unknown as SkillRow[];
   return [
     { value: 'all', label: 'All' },
     ...skills.map((s) => ({ value: s.slug, label: `${s.display_name} (${s.user_count})` })),
@@ -166,7 +166,7 @@ async function getDevs(
   const pagination = buildPaginationClause(ITEMS_PER_PAGE, offset);
 
   const [countResult, dbData] = await Promise.all([
-    sql.query(
+    sql.unsafe(
       `
       SELECT COUNT(*) as count
       FROM leaderboard l
@@ -176,7 +176,7 @@ async function getDevs(
       `,
       params
     ),
-    sql.query(
+    sql.unsafe(
       `
       SELECT
         l.name,
@@ -199,7 +199,7 @@ async function getDevs(
 
   const totalItems = Number(countResult[0].count);
 
-  const devs: DevRow[] = (dbData as LeaderboardRow[]).map((row) => {
+  const devs: DevRow[] = (dbData as unknown as LeaderboardRow[]).map((row) => {
     let skills: string[] = [];
     try {
       if (row.unique_skills) {
