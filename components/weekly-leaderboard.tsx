@@ -25,7 +25,7 @@ export async function WeeklyLeaderboard() {
     FROM leaderboard
     ORDER BY total_score DESC
     LIMIT 5
-  `) as LeaderboardRow[];
+  `) as unknown as LeaderboardRow[];
 
   const leaderboardData = dbData.map((row: LeaderboardRow, i: number) => ({
     rank: i + 1,

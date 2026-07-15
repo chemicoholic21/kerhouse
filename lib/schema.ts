@@ -1,6 +1,6 @@
 // lib/schema.ts
 // Database schema definitions for the skills system
-// Note: This project uses raw SQL with @neondatabase/serverless, not an ORM
+// Note: This project uses raw SQL with postgres.js (Supabase), not an ORM
 // These type definitions document the table structure
 
 /**

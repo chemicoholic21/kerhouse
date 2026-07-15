@@ -30,7 +30,7 @@ export async function GET(request?: Request) {
   }
 
   try {
-    const data = (await sql.query(`
+    const data = (await sql.unsafe(`
       WITH Ranked AS (
         SELECT location, username, total_score,
           ROW_NUMBER() OVER(PARTITION BY location ORDER BY total_score DESC) as rn

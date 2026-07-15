@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import { neon } from '@neondatabase/serverless';
+import { sql } from '@/lib/db';
 import { z } from 'zod';
 import { serverError } from '@/lib/api';
-
-const sql = neon(process.env.DATABASE_URL!);
 
 const SORT_COLUMNS = {
   contribution_score: 'rh.contribution_score',
@@ -97,7 +95,7 @@ export async function GET(request: Request) {
 
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    const countResult = await sql.query(
+    const countResult = await sql.unsafe(
       `SELECT count(*) FROM repo_health rh ${whereClause}`,
       params
     );
@@ -106,7 +104,7 @@ export async function GET(request: Request) {
     params.push(limit);
     params.push(offset);
 
-    const rows = await sql.query(
+    const rows = await sql.unsafe(
       `SELECT
         rh.full_name,
         rh.owner_login,
